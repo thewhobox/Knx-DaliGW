@@ -5,3 +5,5 @@ include/versions.h
 *.knxprod
 knxprod.h
 Ozone_Debug.jdebug.user
+restore/*
+release/*
