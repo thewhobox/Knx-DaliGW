@@ -41,7 +41,7 @@ lib/OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_REG1_V1 firmware-RE
 if (!$?) { exit 1 }
 
 # TEMPORARY: We use our own generic updload files for this version
-Copy-Item scripts/data/* release/data -Force
+# Copy-Item scripts/data/* release/data -Force
 
 # execute generic post-build steps
 lib/OGM-Common/scripts/setup/reusable/Build-Release-Postprocess.ps1 $args[0]
