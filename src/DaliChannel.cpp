@@ -716,12 +716,10 @@ void DaliChannel::koHandleColor(GroupObject &ko)
         return;
     }
 
-    
     if(_isGroup ? ParamGRP_hcl_manu_col : ParamADR_hcl_manu_col)
         _hclIsAutoMode = false;
 
-    logDebugP("AutoConf %i %i %i", _isGroup, ParamADR_hcl_manu_col, _hclIsAutoMode);
-
+    logDebugP("AutoConf %i %i %i", _isGroup, _isGroup ? ParamGRP_hcl_manu_col : ParamADR_hcl_manu_col, _hclIsAutoMode);
 
     uint8_t colorType = _isGroup ? ParamGRP_colorType : ParamADR_colorType;
 
@@ -813,7 +811,7 @@ void DaliChannel::koHandleColor(GroupObject &ko)
 
     setDimmState(254, true, true); // TODO get real
     
-    logDebugP("AutoConf %i %i %i", _isGroup, ParamADR_hcl_manu_col, _hclIsAutoMode);
+    logDebugP("AutoConf %i %i %i", _isGroup, _isGroup ? ParamADR_hcl_manu_col : ParamGRP_hcl_manu_col, _hclIsAutoMode);
 }
 
 void DaliChannel::sendKoStateOnChange(uint16_t koNr, const KNXValue &value, const Dpt &type)
@@ -829,11 +827,15 @@ void DaliChannel::setTemperature(uint16_t value)
     uint16_t mirek = 1000000.0 / value;
     //TODO check the colorType and then set RGB or TW or do nothing if it is no color Device
     sendSpecialCmd(DaliSpecialCmd::SET_DTR, mirek & 0xFF);
+    //logDebugP("t5");
     sendSpecialCmd(DaliSpecialCmd::SET_DTR1, (mirek >> 8) & 0xFF);
+    //logDebugP("t4");
     sendSpecialCmd(DaliSpecialCmd::ENABLE_DT, 8);
+    //logDebugP("t3");
     sendCmd(DaliCmdExtendedDT8::SET_TEMP_COLOUR_TEMPERATURE);
-
+    //logDebugP("t2");
     sendSpecialCmd(DaliSpecialCmd::ENABLE_DT, 8);
+    //logDebugP("t1");
     sendCmd(DaliCmdExtendedDT8::ACTIVATE);
 
     sendKoStateOnChange(ADR_Kocolor_rgb_state, value, Dpt(7, 600));

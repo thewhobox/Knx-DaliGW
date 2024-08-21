@@ -4,7 +4,14 @@
 
 uint8_t MessageQueue::push(Message *msg)
 {
-    while(isLocked) ;
+    unsigned long started = millis();
+    while(isLocked && (millis() - started < 3000)) ;
+
+    if(isLocked)
+    {
+        logError("QUEUE", "paket verworfen");
+        return 0;
+    }
     isLocked = true;
 
     msg->next = nullptr;
@@ -70,5 +77,6 @@ void MessageQueue::setResponse(uint8_t id, int16_t value)
 
 int16_t MessageQueue::getResponse(uint8_t id)
 {
+    if(id == 0) return -13;
     return responses[id];
 }

@@ -118,6 +118,7 @@ class DaliModule : public OpenKNX::Module
 		bool _adrOnlyNew = false;
 		bool _adrRandomize = false;
 		bool _adrDeleteAll = false;
+		uint8_t _adrResponse = 0;
 
 
 		uint8_t _lastChangedGroup = 255;

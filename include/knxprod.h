@@ -55,7 +55,7 @@
 //--------------------Allgemein---------------------------
 #define MAIN_OpenKnxId 0xA4
 #define MAIN_ApplicationNumber 0x01
-#define MAIN_ApplicationVersion 0x15
+#define MAIN_ApplicationVersion 0x06
 #define MAIN_OrderNumber "REG1-Dali"
 #define MAIN_ParameterSize 2106
 #define MAIN_MaxKoNumber 1602

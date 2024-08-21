@@ -189,13 +189,10 @@ void DaliModule::loop(bool configured)
 
 void DaliModule::loop1(bool configured)
 {
-    if(_adrState != AddressingState::OFF)
-    {
-        loopMessages();
-        return;
-    }
-
     loopMessages();
+    if(_adrState != AddressingState::OFF)
+        return;
+
     loopBusState();
 
     if(!configured) return;
@@ -385,6 +382,9 @@ void DaliModule::loopMessages()
         {
             int16_t resp = dali->sendSpecialCmdWait(msg.para1, msg.para2);
             if(msg.wait)
+                logDebugP("save %i", msg.id);
+
+            if(msg.wait)
                 queue.setResponse(msg.id, resp);
             break;
         }
@@ -406,34 +406,34 @@ void DaliModule::loopAddressing()
         if(_adrDeleteAll) logInfoP("Delete all short addresses");
         else logInfoP("Keeping all short addresses");
 
-        dali->sendSpecialCmd(DaliSpecialCmd::INITIALISE, _adrOnlyNew ? 255 : 0);
+        sendCmdSpecial(DaliSpecialCmd::INITIALISE, _adrOnlyNew ? 255 : 0);
         _adrState = AddressingState::INIT2;
         break;
       case AddressingState::INIT2:
-        dali->sendSpecialCmd(DaliSpecialCmd::INITIALISE, _adrOnlyNew ? 255 : 0);
+        sendCmdSpecial(DaliSpecialCmd::INITIALISE, _adrOnlyNew ? 255 : 0);
         if(_adrDeleteAll)
             _adrState = AddressingState::WRITE_DTR;
         else
             _adrState = (_adrRandomize ? AddressingState::RANDOM : AddressingState::STARTSEARCH);
         break;
       case AddressingState::WRITE_DTR:
-        dali->sendSpecialCmd(DaliSpecialCmd::SET_DTR, 255);
+        sendCmdSpecial(DaliSpecialCmd::SET_DTR, 255);
         _adrState = AddressingState::REMOVE_SHORT;
         break;
       case AddressingState::REMOVE_SHORT:
-        dali->sendCmd(63, DaliCmd::DTR_AS_SHORT, DaliAddressTypes::GROUP);
+        sendCmd(63, DaliCmd::DTR_AS_SHORT, DaliAddressTypes::GROUP);
         _adrState = AddressingState::REMOVE_SHORT2;
         break;
       case AddressingState::REMOVE_SHORT2:
-        dali->sendCmd(63, DaliCmd::DTR_AS_SHORT, DaliAddressTypes::GROUP);
+        sendCmd(63, DaliCmd::DTR_AS_SHORT, DaliAddressTypes::GROUP);
         _adrState = (_adrRandomize ? AddressingState::RANDOM : AddressingState::STARTSEARCH);
         break;
       case AddressingState::RANDOM:
-        dali->sendSpecialCmd(DaliSpecialCmd::RANDOMISE);
+        sendCmdSpecial(DaliSpecialCmd::RANDOMISE);
         _adrState = AddressingState::RANDOM2;
         break;
       case AddressingState::RANDOM2:
-        dali->sendSpecialCmd(DaliSpecialCmd::RANDOMISE);
+        sendCmdSpecial(DaliSpecialCmd::RANDOMISE);
         _adrState = AddressingState::RANDOMWAIT;
         break;
       case AddressingState::RANDOMWAIT:  // wait 100ms for random address to generate
@@ -444,24 +444,27 @@ void DaliModule::loopAddressing()
         _adrIterations = 0;
         _adrSearch = 0xFFFFFF;
       case AddressingState::SEARCHHIGH:
-        dali->sendSpecialCmd(DaliSpecialCmd::SEARCHADDRH, (_adrSearch >> 16) & 0xFF);
+        sendCmdSpecial(DaliSpecialCmd::SEARCHADDRH, (_adrSearch >> 16) & 0xFF);
         _adrState = AddressingState::SEARCHMID;
         break;
       case AddressingState::SEARCHMID:
-        dali->sendSpecialCmd(DaliSpecialCmd::SEARCHADDRM, (_adrSearch >> 8) & 0xFF);
+        sendCmdSpecial(DaliSpecialCmd::SEARCHADDRM, (_adrSearch >> 8) & 0xFF);
         _adrState = AddressingState::SEARCHLOW;
         break;
       case AddressingState::SEARCHLOW:
-        dali->sendSpecialCmd(DaliSpecialCmd::SEARCHADDRL, (_adrSearch) & 0xFF);
+        sendCmdSpecial(DaliSpecialCmd::SEARCHADDRL, (_adrSearch) & 0xFF);
         _adrState = AddressingState::COMPARE;
         break;
       case AddressingState::COMPARE:
-        dali->sendSpecialCmd(DaliSpecialCmd::COMPARE);
+        logDebugP("comp");
+        _adrResponse = sendCmdSpecial(DaliSpecialCmd::COMPARE, 0, true);
+        logDebugP("send %i", _adrResponse);
         _adrState = AddressingState::CHECKFOUND;
         break;
       case AddressingState::CHECKFOUND:
         {  // create scope for response variable
-        int response = DaliBus.getLastResponse();
+        int response = queue.getResponse(_adrResponse);
+        if(response == -200) return;
         if (response != DALI_RX_EMPTY)
           if (_adrIterations >= 24) // ballast found
           {
@@ -474,7 +477,7 @@ void DaliModule::loopAddressing()
                 _adrState = AddressingState::PROGRAMSHORT;
             } else {
                 _adrState = AddressingState::GETSHORT;
-                dali->sendSpecialCmd(DaliSpecialCmd::QUERY_SHORT, 0);
+                sendCmdSpecial(DaliSpecialCmd::QUERY_SHORT, 0, true);
             }
           }
           else {
@@ -518,14 +521,14 @@ void DaliModule::loopAddressing()
         _adrNew = 0;
         while(addresses[_adrNew] == true)
             _adrNew++;
-        dali->sendSpecialCmd(DaliSpecialCmd::PROGRAMSHORT, (_adrNew << 1) | 1);
+        sendCmdSpecial(DaliSpecialCmd::PROGRAMSHORT, (_adrNew << 1) | 1);
         ballasts[_adrFound].address = _adrNew;
         addresses[_adrNew] = true;
         _adrFound++;
         _adrState = AddressingState::VERIFYSHORT;
         break;
       case AddressingState::VERIFYSHORT:
-        dali->sendSpecialCmd(DaliSpecialCmd::VERIFYSHORT, (_adrNew << 1) | 1);
+        sendCmdSpecial(DaliSpecialCmd::VERIFYSHORT, (_adrNew << 1) | 1, true);
         _adrState = AddressingState::VERIFYSHORTRESPONSE;
         break;
       case AddressingState::VERIFYSHORTRESPONSE:
@@ -539,16 +542,16 @@ void DaliModule::loopAddressing()
         }
         break;
       case AddressingState::WITHDRAW:
-        dali->sendSpecialCmd(DaliSpecialCmd::WITHDRAW);
+        sendCmdSpecial(DaliSpecialCmd::WITHDRAW);
         _adrState = AddressingState::STARTSEARCH;
         break;
       case AddressingState::TERMINATE:
-        dali->sendSpecialCmd(DaliSpecialCmd::TERMINATE);
+        sendCmdSpecial(DaliSpecialCmd::TERMINATE);
         _adrState = AddressingState::OFF;
         logInfoP("Found %i ballasts", _adrFound);
         break;
       case AddressingState::SEARCHSHORT:
-        dali->sendCmd(_adrFound, DaliCmd::QUERY_ACTUAL_LEVEL);
+        sendCmd(_adrFound, DaliCmd::QUERY_ACTUAL_LEVEL, true);
         _adrState = AddressingState::CHECKSEARCHSHORT;
         break;
       case AddressingState::CHECKSEARCHSHORT:
@@ -1599,7 +1602,16 @@ uint8_t DaliModule::sendArc(byte addr, byte value, byte type)
     msg->para1 = addr;
     msg->para2 = DaliHelper::percentToArc(value);
     msg->addrtype = type;
-    return queue.push(msg);
+    uint8_t counter = 3;
+    uint8_t resp = 0;
+    while(counter)
+    {
+        resp = queue.push(msg);
+        if(resp != 0)
+            return resp;
+    }
+    logErrorP("withdraw command");
+    return 0;
 }
 
 uint8_t DaliModule::sendCmd(byte addr, byte value, byte type, bool wait)
@@ -1611,7 +1623,16 @@ uint8_t DaliModule::sendCmd(byte addr, byte value, byte type, bool wait)
     msg->para2 = value;
     msg->addrtype = type;
     msg->wait = wait;
-    return queue.push(msg);
+    uint8_t counter = 3;
+    uint8_t resp = 0;
+    while(counter)
+    {
+        resp = queue.push(msg);
+        if(resp != 0)
+            return resp;
+    }
+    logErrorP("withdraw command");
+    return 0;
 }
 
 uint8_t DaliModule::sendCmdSpecial(DaliSpecialCmd command, byte value, bool wait)
@@ -1623,7 +1644,16 @@ uint8_t DaliModule::sendCmdSpecial(DaliSpecialCmd command, byte value, bool wait
     msg->para2 = value;
     msg->addrtype = 0;
     msg->wait = wait;
-    return queue.push(msg);
+    uint8_t counter = 3;
+    uint8_t resp = 0;
+    while(counter)
+    {
+        resp = queue.push(msg);
+        if(resp != 0)
+            return resp;
+    }
+    logErrorP("withdraw command");
+    return 0;
 }
 
 uint8_t DaliModule::sendMsg(MessageType t, byte p1, byte p2, byte type, bool wait)
@@ -1635,7 +1665,16 @@ uint8_t DaliModule::sendMsg(MessageType t, byte p1, byte p2, byte type, bool wai
     msg->para2 = p2;
     msg->addrtype = type;
     msg->wait = wait;
-    return queue.push(msg);
+    uint8_t counter = 3;
+    uint8_t resp = 0;
+    while(counter)
+    {
+        resp = queue.push(msg);
+        if(resp != 0)
+            return resp;
+    }
+    logErrorP("withdraw command");
+    return 0;
 }
 
 DaliModule openknxDaliModule;
