@@ -635,8 +635,9 @@ void DaliChannel::koHandleDimmAbs(GroupObject &ko)
 
     uint8_t value = ko.value(Dpt(5, 1));
     logDebugP("Dimmen Absolut auf %i%%", value);
-    sendArc(value);
-    setDimmState(DaliHelper::percentToArc(value), true, true);
+    uint8_t arc = DaliHelper::percentToArc(value);
+    sendArc(arc);
+    setDimmState(arc, true, true);
 }
 
 void DaliChannel::koHandleLock(GroupObject &ko)
