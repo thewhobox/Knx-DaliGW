@@ -1602,16 +1602,7 @@ uint8_t DaliModule::sendArc(byte addr, byte value, byte type)
     msg->para1 = addr;
     msg->para2 = DaliHelper::percentToArc(value);
     msg->addrtype = type;
-    uint8_t counter = 3;
-    uint8_t resp = 0;
-    while(counter)
-    {
-        resp = queue.push(msg);
-        if(resp != 0)
-            return resp;
-    }
-    logErrorP("withdraw command");
-    return 0;
+    return queue.push(msg);
 }
 
 uint8_t DaliModule::sendCmd(byte addr, byte value, byte type, bool wait)
@@ -1623,16 +1614,7 @@ uint8_t DaliModule::sendCmd(byte addr, byte value, byte type, bool wait)
     msg->para2 = value;
     msg->addrtype = type;
     msg->wait = wait;
-    uint8_t counter = 3;
-    uint8_t resp = 0;
-    while(counter)
-    {
-        resp = queue.push(msg);
-        if(resp != 0)
-            return resp;
-    }
-    logErrorP("withdraw command");
-    return 0;
+    return queue.push(msg);
 }
 
 uint8_t DaliModule::sendCmdSpecial(DaliSpecialCmd command, byte value, bool wait)
@@ -1644,16 +1626,7 @@ uint8_t DaliModule::sendCmdSpecial(DaliSpecialCmd command, byte value, bool wait
     msg->para2 = value;
     msg->addrtype = 0;
     msg->wait = wait;
-    uint8_t counter = 3;
-    uint8_t resp = 0;
-    while(counter)
-    {
-        resp = queue.push(msg);
-        if(resp != 0)
-            return resp;
-    }
-    logErrorP("withdraw command");
-    return 0;
+    return queue.push(msg);
 }
 
 uint8_t DaliModule::sendMsg(MessageType t, byte p1, byte p2, byte type, bool wait)
@@ -1665,16 +1638,7 @@ uint8_t DaliModule::sendMsg(MessageType t, byte p1, byte p2, byte type, bool wai
     msg->para2 = p2;
     msg->addrtype = type;
     msg->wait = wait;
-    uint8_t counter = 3;
-    uint8_t resp = 0;
-    while(counter)
-    {
-        resp = queue.push(msg);
-        if(resp != 0)
-            return resp;
-    }
-    logErrorP("withdraw command");
-    return 0;
+    return queue.push(msg);
 }
 
 DaliModule openknxDaliModule;
