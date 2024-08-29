@@ -18,4 +18,6 @@ class MessageQueue
         uint8_t currentId = 0;
 		int16_t responses[256];
         bool isLocked = false;
+        unsigned long lastPush = 0;
+        unsigned long lastPop = 0;
 };

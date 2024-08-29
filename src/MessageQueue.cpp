@@ -4,15 +4,9 @@
 
 uint8_t MessageQueue::push(Message *msg)
 {
-    unsigned long started = millis();
-    while(isLocked && (millis() - started < 3000)) ;
-
-    if(isLocked)
-    {
-        logError("QUEUE", "paket verworfen");
-        return 0;
-    }
+    while(isLocked) ;
     isLocked = true;
+    logDebug("queue", "push");
 
     msg->next = nullptr;
     if(tail == nullptr)
@@ -25,6 +19,7 @@ uint8_t MessageQueue::push(Message *msg)
 
     tail->next = msg;
     tail = msg;
+    lastPush = millis();
     isLocked = false;
     
     return msg->id;
@@ -32,11 +27,18 @@ uint8_t MessageQueue::push(Message *msg)
 
 bool MessageQueue::pop(Message &msg)
 {
+    if(millis() - lastPush > 500) return false;
+    if(lastPop != 0 && (millis() - lastPop < 20)) return false;
+
     unsigned long started = millis();
     while(isLocked && (millis() - started < 3000)) ;
-
-    if(isLocked || head == nullptr) return false;
+    if(isLocked) return false;
     isLocked = true;
+
+    if(head == nullptr)
+        lastPop = millis();
+    else
+        lastPop = 0;
 
     msg.addrtype = head->addrtype;
     msg.data = head->data;
