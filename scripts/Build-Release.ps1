@@ -42,6 +42,12 @@ if (!$?) { exit 1 }
 
 # TEMPORARY: We use our own generic updload files for this version
 # Copy-Item scripts/data/* release/data -Force
+$projectDir = Get-Location
+
+$files = Get-ChildItem -Path $projectDir/*.ae-manu
+# $filePath = $projectDir/$files[0].Name
+$files
+Copy-Item $projectDir/$($files[0].Name) release/data/$($files[0].Name) -Force
 
 # execute generic post-build steps
 lib/OGM-Common/scripts/setup/reusable/Build-Release-Postprocess.ps1 $args[0]
