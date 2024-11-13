@@ -21,17 +21,19 @@ void setup()
 	const uint8_t firmwareRevision = 2;
 	openknx.init(firmwareRevision);
 	//openknxDaliModule.setCallback(daliCallback);
-// 	openknx.addModule(1, openknxDaliModule);
-// 	openknx.addModule(2, openknxTimerModule);
-// #ifdef ARDUINO_ARCH_RP2040
-// 	openknx.addModule(3, openknxFileTransferModule);
-// #endif
+	openknx.addModule(1, openknxDaliModule);
+	openknx.addModule(2, openknxTimerModule);
+#ifdef ARDUINO_ARCH_RP2040
+	openknx.addModule(3, openknxFileTransferModule);
+#endif
 	openknx.setup();
 
+#ifdef ARDUINO_ARCH_RP2040
 	setup0ready = true;
 
-	// while(!setup1ready)
-	// 	delay(1);
+	while(!setup1ready)
+		delay(1);
+#endif
 }
 
 void loop()
@@ -39,18 +41,27 @@ void loop()
 	openknx.loop();
 }
 
-// void setup1()
-// {
-// 	while(!setup0ready)
-// 		delay(1);
+#ifdef ARDUINO_ARCH_RP2040
+void setup1()
+{
+	while(!setup0ready)
+		delay(1);
+	openknxDaliModule.setup1(knx.configured());
+	setup1ready = true;
+}
 
-// 	openknxDaliModule.setup1(knx.configured());
+void loop1()
+{
+	openknxDaliModule.loop1(knx.configured());
+}
+#elif defined(ARDUINO_ARCH_ESP32)
+void setup1()
+{
+	openknx.setup1();
+}
 
-// 	setup1ready = true;
-// }
-
-// void loop1()
-// {
-// 	// openknx.loop1();
-// 	openknxDaliModule.loop1(knx.configured());
-// }
+void loop1()
+{
+	openknx.loop1();
+}
+#endif
