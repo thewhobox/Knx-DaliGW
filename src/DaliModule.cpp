@@ -1,6 +1,6 @@
 #include "DaliModule.h"
 
-unsigned long daliActivity = 0;
+uint32_t daliActivity = 0;
 
 const std::string DaliModule::name()
 {
@@ -406,7 +406,10 @@ void DaliModule::loopAddressing()
         if(_adrDeleteAll) logInfoP("Delete all short addresses");
         else logInfoP("Keeping all short addresses");
 
-        sendCmdSpecial(DaliSpecialCmd::INITIALISE, _adrOnlyNew ? 255 : 0);
+        if(_adrAssign) logInfoP("Assigning short addresses");
+        else logInfoP("Not assigning short addresses");
+
+        dali->sendSpecialCmd(DaliSpecialCmd::INITIALISE, _adrOnlyNew ? 255 : 0);
         _adrState = AddressingState::INIT2;
         break;
       case AddressingState::INIT2:
@@ -728,7 +731,7 @@ void DaliModule::showHelp()
     openknx.console.printHelpLine("scan", "Dali scan for EVGs");
     openknx.console.printHelpLine("arc", "Dali set Value for EVG, Group or Broadcast");
     openknx.console.printHelpLine("set", "Dali set EVG short address");
-    openknx.console.printHelpLine("stepUp", "stepUp x => send x times StepUp");
+    openknx.console.printHelpLine("stepUp", "stepUp xyy => send x times StepUp to evg y");
     openknx.console.printHelpLine("stepDown", "stepDown xyy => send x times StepDown to evg y");
     openknx.console.printHelpLine("getLvl", "getLvl yy => get level of evg y");
 }

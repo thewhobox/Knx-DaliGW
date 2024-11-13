@@ -9,9 +9,6 @@
 #include "DaliCommands.h"
 #include "HclCurve.h"
 
-#define DALI_TX 17
-#define DALI_RX 16
-
 #ifndef DALI_WAIT_RANDOMIZE
 #define DALI_WAIT_RANDOMIZE 1000
 #endif
