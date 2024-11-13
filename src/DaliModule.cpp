@@ -690,10 +690,10 @@ void DaliModule::loopBusState()
     {
         _lastBusState = state;
 
-        if(state)
-            openknx.info3Led.activity(daliActivity, true);
-        else
-            openknx.info3Led.off();
+        // if(state)
+        //     openknx.info3Led.activity(daliActivity, true);
+        // else
+        //     openknx.info3Led.off();
     }
 #endif
     if(state != _daliBusStateToSet)
