@@ -1,4 +1,5 @@
 #include "colorhelper.h"
+#include "OpenKNX.h"
 
 uint16_t ColorHelper::getValueFromSun(uint16_t minCurr, uint16_t minDiff, uint16_t minK, uint16_t maxK)
 {
@@ -110,13 +111,13 @@ void ColorHelper::xyyToRGB(uint16_t ix, uint16_t iy, uint8_t iz, uint8_t& r, uin
 
 uint16_t ColorHelper::getBytes(float input)
 {
-	return max(min(round(input * 65536), 65534.0f), 0.0f);
+	return max(min(round(input * 65534), 65534.0f), 0.0f);
 }
 
 float ColorHelper::getFloat(uint16_t input)
 {
-    float output = input / 65536.0f;
-	return max(min(output, 0.0f), 1.0f);
+    float output = input / 65534.0f;
+	return max(min(output, 1.0f), 0.0f);
 }
 
 double ColorHelper::hue2rgb(double p, double q, double t)

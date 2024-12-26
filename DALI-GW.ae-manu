@@ -28345,7 +28345,7 @@
                                         "Access": 2,
                                         "Id": -1,
                                         "Name": "settingsWrite",
-                                        "Script": "// if(getParaInt(\"fadeTime\") != \"0\" && getParaInt(\"fadeTimeExtendedMultiplier\") != \"0\")\r\n//     throw new Error(device.getMessage(18)); // error \r\n\r\nprogress.setText(device.getMessage(15)); // start\r\n\r\nprogress.setText(\"0.1\");\r\nvar data = [];\r\nprogress.setText(\"0.1\");\r\ndata.push(10);\r\nprogress.setText(\"0.2\");\r\ndata.push(context.Channel);\r\nprogress.setText(\"0.3\");\r\nvar x = getParaFloat(device, \"min\");\r\nprogress.setText(\"1.1\");\r\nvar x = getBytes(x);\r\nprogress.setText(\"1.2\");\r\nvar temp = getBytes(getParaFloat(device, \"min\"));\r\nprogress.setText(\"1\");\r\ndata.push(temp >> 8);\r\ndata.push(temp & 255);\r\ntemp = getBytes(getParaFloat(device, \"max\"));\r\nprogress.setText(\"2\");\r\ndata.push(temp >> 8);\r\ndata.push(temp & 255);\r\nif(getParaBool(device, \"poweron\"))\r\n{\r\n    temp = getBytes(getParaFloat(device, \"poweronlevel\"));\r\n    data.push(temp >> 8);\r\n    data.push(temp & 255);\r\n} else {\r\n    data.push(255);\r\n    data.push(0);\r\n}\r\nprogress.setText(\"3\");\r\nif(getParaBool(device, \"failureon\"))\r\n{\r\n    temp = getBytes(getParaFloat(device, \"failureonlevel\"));\r\n    data.push(temp >> 8);\r\n    data.push(temp & 255);\r\n} else {\r\n    data.push(255);\r\n    data.push(0);\r\n}\r\nprogress.setText(\"4\");\r\n\r\nvar fade = getParaInt(device, \"fadeTime\");\r\nfade = fade << 4;\r\nfade |= getParaInt(device, \"fadeRate\");\r\ndata.push(fade);\r\ndata.push(0);//1byte free\r\nvar groups = getParaInt(device, \"g0\");\r\ngroups |= getParaInt(device, \"g1\") << 1;\r\ngroups |= getParaInt(device, \"g2\") << 2;\r\ngroups |= getParaInt(device, \"g3\") << 3;\r\ngroups |= getParaInt(device, \"g4\") << 4;\r\ngroups |= getParaInt(device, \"g5\") << 5;\r\ngroups |= getParaInt(device, \"g6\") << 6;\r\ngroups |= getParaInt(device, \"g7\") << 7;\r\ndata.push(groups);\r\ngroups = getParaInt(device, \"g8\");\r\ngroups |= getParaInt(device, \"g9\") << 1;\r\ngroups |= getParaInt(device, \"g10\") << 2;\r\ngroups |= getParaInt(device, \"g11\") << 3;\r\ngroups |= getParaInt(device, \"g12\") << 4;\r\ngroups |= getParaInt(device, \"g13\") << 5;\r\ngroups |= getParaInt(device, \"g14\") << 6;\r\ngroups |= getParaInt(device, \"g15\") << 7;\r\ndata.push(groups);\r\n\r\nprogress.setText(device.getMessage(16)); // transmit\r\nonline.connect();\r\nvar resp = online.invokeFunctionProperty(160, 1, data);\r\nprogress.setProgress(20);\r\n\r\ndata = [\r\n        12,\r\n        context.Channel, // + 128; only for group!\r\n        0, //scene number\r\n        0, //enabled\r\n        getParaInt(device, \"deviceType\"),\r\n        getParaInt(device, \"colorType\"),\r\n        0, 0, 0, 0 //will be filled later\r\n    ];\r\n\r\nfor(var i = 0; i < 16; i++)\r\n{\r\n    data[2] = i;\r\n    var isEnabled = getParaBool(device, \"s\" + i + \"t\");\r\n    data[3] = isEnabled;\r\n    data[6] = isEnabled ? getParaInt(device, \"s\" + i + \"v\") : 255;\r\n\r\n    //deviceType is Color\r\n    if(isEnabled && data[4] == 8)\r\n    {\r\n        //colorType is TunableWhite\r\n        if(data[5] == 2)\r\n        {\r\n            var kelvin = getParaInt(device, \"s\" + i + \"ct\");\r\n            data[7] = kelvin >> 8;\r\n            data[8] = kelvin & 256;\r\n        } else { //it is RGB\r\n            var etsval = device.getParameterByName(\"s\" + i + \"cc\").value;\r\n            if(etsval < 0)\r\n                etsval = etsval + 4294967296;\r\n            data[7] = (etsval >> 16) & 255;\r\n            data[8] = (etsval >> 8) & 255;\r\n            data[9] = etsval & 255;\r\n        }\r\n    }\r\n\r\n    resp = online.invokeFunctionProperty(160, 1, data);\r\n    progress.setProgress(i*5 + 25);\r\n}\r\n\r\nonline.disconnect();\r\nprogress.setText(device.getMessage(17)); // fin",
+                                        "Script": "// if(getParaInt(\"fadeTime\") != \"0\" && getParaInt(\"fadeTimeExtendedMultiplier\") != \"0\")\r\n//     throw new Error(device.getMessage(18)); // error \r\n\r\nprogress.setText(device.getMessage(15)); // start\r\n\r\nvar index = 0;\r\nvar data = [];\r\ndata[index++] = 10;\r\ndata[index++] = context.Channel;\r\nvar temp = getBytes(getParaFloat(device, \"min\") / 100.0);\r\ndata[index++] = temp >> 8;\r\ndata[index++] = temp & 255;\r\ntemp = getBytes(getParaFloat(device, \"max\") / 100.0);\r\ndata[index++] = temp >> 8;\r\ndata[index++] = temp & 255;\r\nif(getParaBool(device, \"poweron\"))\r\n{\r\n    temp = getBytes(getParaFloat(device, \"poweronlevel\") / 100.0);\r\n    data[index++] = temp >> 8;\r\n    data[index++] = temp & 255;\r\n} else {\r\n    data[index++] = 255;\r\n    data[index++] = 255;\r\n}\r\nif(getParaBool(device, \"failureon\"))\r\n{\r\n    temp = getBytes(getParaFloat(device, \"failureonlevel\") / 100.0);\r\n    data[index++] = temp >> 8;\r\n    data[index++] = temp & 255;\r\n} else {\r\n    data[index++] = 255;\r\n    data[index++] = 255;\r\n}\r\n\r\nvar fade = getParaInt(device, \"fadeTime\");\r\nfade = fade << 4;\r\nfade |= getParaInt(device, \"fadeRate\");\r\ndata[index++] = fade;\r\ndata[index++] = 0;//1byte free\r\nvar groups = getParaInt(device, \"g0\");\r\ngroups |= getParaInt(device, \"g1\") << 1;\r\ngroups |= getParaInt(device, \"g2\") << 2;\r\ngroups |= getParaInt(device, \"g3\") << 3;\r\ngroups |= getParaInt(device, \"g4\") << 4;\r\ngroups |= getParaInt(device, \"g5\") << 5;\r\ngroups |= getParaInt(device, \"g6\") << 6;\r\ngroups |= getParaInt(device, \"g7\") << 7;\r\ndata[index++] = groups;\r\ngroups = getParaInt(device, \"g8\");\r\ngroups |= getParaInt(device, \"g9\") << 1;\r\ngroups |= getParaInt(device, \"g10\") << 2;\r\ngroups |= getParaInt(device, \"g11\") << 3;\r\ngroups |= getParaInt(device, \"g12\") << 4;\r\ngroups |= getParaInt(device, \"g13\") << 5;\r\ngroups |= getParaInt(device, \"g14\") << 6;\r\ngroups |= getParaInt(device, \"g15\") << 7;\r\ndata[index++] = groups;\r\n\r\nprogress.setText(device.getMessage(16)); // transmit\r\nonline.connect();\r\nvar resp = online.invokeFunctionProperty(160, 1, data);\r\nprogress.setText(\"after\");\r\nprogress.setProgress(20);\r\n\r\ndata = [\r\n        12,\r\n        context.Channel, // + 128; only for group!\r\n        0, //scene number\r\n        0, //enabled\r\n        getParaInt(device, \"deviceType\"),\r\n        getParaInt(device, \"colorType\"),\r\n        0, 0, 0, 0 //will be filled later\r\n    ];\r\n\r\nfor(var i = 0; i < 16; i++)\r\n{\r\n    data[2] = i;\r\n    var isEnabled = getParaBool(device, \"s\" + i + \"t\");\r\n    data[3] = isEnabled;\r\n    data[6] = isEnabled ? getParaInt(device, \"s\" + i + \"v\") : 255;\r\n\r\n    //deviceType is Color\r\n    if(isEnabled && data[4] == 8)\r\n    {\r\n        //colorType is TunableWhite\r\n        if(data[5] == 2)\r\n        {\r\n            var kelvin = getParaInt(device, \"s\" + i + \"ct\");\r\n            data[7] = kelvin >> 8;\r\n            data[8] = kelvin & 256;\r\n        } else { //it is RGB\r\n            var etsval = device.getParameterByName(\"s\" + i + \"cc\").value;\r\n            if(etsval < 0)\r\n                etsval = etsval + 4294967296;\r\n            data[7] = (etsval >> 16) & 255;\r\n            data[8] = (etsval >> 8) & 255;\r\n            data[9] = etsval & 255;\r\n        }\r\n    }\r\n\r\n    progress.setText(device.getMessage(21) + i); // Übertrage Szene i\r\n    resp = online.invokeFunctionProperty(160, 1, data);\r\n    progress.setProgress(i*5 + 25);\r\n}\r\n\r\nonline.disconnect();\r\nprogress.setText(device.getMessage(17)); // fin",
                                         "UseTextParameter": false,
                                         "TextRef": 0,
                                         "UseIcon": false,
@@ -48352,6 +48352,25 @@
           }
         ],
         "TranslationText": false
+      },
+      {
+        "$type": "Kaenx.Creator.Models.Message, Kaenx.Creator.Share",
+        "UId": 21,
+        "Id": 21,
+        "Name": "evgWriteScene",
+        "Text": [
+          {
+            "$type": "Kaenx.Creator.Models.Translation, Kaenx.Creator.Share",
+            "Language": {
+              "$type": "Kaenx.Creator.Models.Language, Kaenx.Creator.Share",
+              "CultureCode": "de-DE",
+              "Text": "Deutsch"
+            },
+            "Text": "Übertrage Szene ",
+            "Preview": "Übertrage Szene "
+          }
+        ],
+        "TranslationText": false
       }
     ],
     "Unions": [],
@@ -50619,9 +50638,9 @@
     "DefaultLanguage": "de-DE",
     "DefaultLanguageIndex": 0,
     "Name": "Dali GW 1-Kanal",
-    "ReplacesVersions": "13",
-    "Script": "function getFloat(data, offset)\n{\n    var level = (data[offset] << 8 | data[offset + 1]);\n    return level / 65535;\n}\n\nfunction getBytes(data)\n{\n    return data * 65535;\n}\n\nfunction getParaInt(device, paraName)\n{\n    return parseInt(device.getParameterByName(paraName).value, 10);\n}\n\nfunction getParaFloat(device, paraName)\n{\n    return parseFloat(device.getParameterByName(paraName).value.replace(\",\", \".\"));\n}\n\nfunction getParaBool(device, paraName)\n{\n    return device.getParameterByName(paraName).value == \"1\";\n}\n\nfunction setPara(device, paraName, value)\n{\n    device.getParameterByName(paraName).value = value;\n}\n\nfunction arcToPercent(arc)\n{\n    if(arc == 0) return 0;\n    return Math.pow(10, ((arc-1)/(253/3))-1);\n}",
-    "NameText": "V 0.14 Dali GW 1-Kanal",
+    "ReplacesVersions": "21 22",
+    "Script": "function getFloat(data, offset)\n{\n    var level = (data[offset] << 8 | data[offset + 1]);\n    return level / 65534;\n}\n\nfunction getBytes(data)\n{\n    return data * 65534;\n}\n\nfunction getParaInt(device, paraName)\n{\n    return parseInt(device.getParameterByName(paraName).value, 10);\n}\n\nfunction getParaFloat(device, paraName)\n{\n    var value_out = device.getParameterByName(paraName).value;\n    if (typeof value_out === 'number')\n        return value_out;\n    return parseFloat(value_out.replace(\",\", \".\"));\n}\n\nfunction getParaBool(device, paraName)\n{\n    return device.getParameterByName(paraName).value == \"1\";\n}\n\nfunction setPara(device, paraName, value)\n{\n    device.getParameterByName(paraName).value = value;\n}\n\nfunction arcToPercent(arc)\n{\n    if(arc == 0) return 0;\n    return Math.pow(10, ((arc-1)/(253/3))-1);\n}",
+    "NameText": "V 1.7 Dali GW 1-Kanal",
     "Text": [
       {
         "$type": "Kaenx.Creator.Models.Translation, Kaenx.Creator.Share",
@@ -50634,7 +50653,7 @@
         "Preview": "OpenKNX-Dali-Gateway"
       }
     ],
-    "Number": 14,
+    "Number": 23,
     "AddressTableMaxCount": 65535,
     "AddressTableOffset": 0,
     "AddressMemoryId": -1,
@@ -50651,6 +50670,7 @@
     "IsMemSizeAuto": false,
     "IsHelpActive": true,
     "IsBusInterfaceActive": false,
+    "IsSecureActive": false,
     "HasBusInterfaceRouter": false,
     "BusInterfaceCounter": 4,
     "Procedure": "<LoadProcedures>\r\n  <LoadProcedure MergeId=\"1\">\r\n    <LdCtrlCompareProp InlineData=\"00FA\" ObjIdx=\"0\" PropId=\"12\">\r\n      <OnError Cause=\"CompareMismatch\" MessageRef=\"loadErrorManu\" />\r\n    </LdCtrlCompareProp>\r\n    <LdCtrlCompareProp InlineData=\"0000A4010800\" ObjIdx=\"0\" PropId=\"78\">\r\n      <OnError Cause=\"CompareMismatch\" MessageRef=\"loadErrorApp\" />\r\n    </LdCtrlCompareProp>\r\n  </LoadProcedure>\r\n  <LoadProcedure MergeId=\"2\">\r\n    <LdCtrlRelSegment LsmIdx=\"4\" Size=\"2106\" Mode=\"1\" Fill=\"0\" AppliesTo=\"full\" />\r\n    <LdCtrlRelSegment LsmIdx=\"4\" Size=\"2106\" Mode=\"0\" Fill=\"0\" AppliesTo=\"par\" />\r\n  </LoadProcedure>\r\n  <LoadProcedure MergeId=\"4\">\r\n    <LdCtrlWriteRelMem ObjIdx=\"4\" Offset=\"0\" Size=\"2106\" Verify=\"true\" AppliesTo=\"full,par\" />\r\n  </LoadProcedure>\r\n  <LoadProcedure MergeId=\"7\">\r\n    <LdCtrlLoadImageProp ObjIdx=\"1\" PropId=\"27\" />\r\n    <LdCtrlLoadImageProp ObjIdx=\"2\" PropId=\"27\" />\r\n    <LdCtrlLoadImageProp ObjIdx=\"3\" PropId=\"27\" />\r\n    <LdCtrlLoadImageProp ObjIdx=\"4\" PropId=\"27\" />\r\n  </LoadProcedure>\r\n</LoadProcedures>",

@@ -217,6 +217,7 @@ void DaliModule::loopInitData()
     DaliChannel channel = channels[_adrFound];
     _adrFound++;
 
+    logInfoP("CH%i %s", _adrFound, channel.isConfigured() ? "configured" : "not configured");
     if(channel.isConfigured())
     {
         if(_adrFound == 0)
@@ -318,7 +319,7 @@ int16_t DaliModule::getInfo(byte address, int command, uint8_t additional)
         } else if(resp >= 0)
         {
             gotResponse = true;
-        } else if(millis() - _daliStateLast > 2000)
+        } else if(millis() - _daliStateLast > 100)
         {
             logErrorP("Got no response from channel %i (2)", address);
             gotResponse = true;
@@ -356,14 +357,12 @@ void DaliModule::loopMessages()
     }
 
     Message msg;
-    
     if(!queue.pop(msg)) return;
 
     switch(msg.type)
     {
         case MessageType::Arc:
         {
-            logInfoP("sending Arc");
             int16_t resp = dali->sendArcWait(msg.para1, msg.para2, msg.addrtype);
             if(msg.wait)
                 queue.setResponse(msg.id, resp);
@@ -459,9 +458,7 @@ void DaliModule::loopAddressing()
         _adrState = AddressingState::COMPARE;
         break;
       case AddressingState::COMPARE:
-        logDebugP("comp");
         _adrResponse = sendCmdSpecial(DaliSpecialCmd::COMPARE, 0, true);
-        logDebugP("send %i", _adrResponse);
         _adrState = AddressingState::CHECKFOUND;
         break;
       case AddressingState::CHECKFOUND:
@@ -1255,31 +1252,145 @@ void DaliModule::funcHandleAssign(uint8_t *data, uint8_t *resultData, uint8_t &r
 
 void DaliModule::funcHandleEvgWrite(uint8_t *data, uint8_t *resultData, uint8_t &resultLength)
 {
-    logInfoP("Starting setting up EVG");
-
     DaliChannel channel = channels[data[1]];
-    channel.setMinMax(data[2], data[3]);
+    logInfoP("Starting setting up EVG %i", data[1]);
+    logIndentUp();
 
     uint16_t tempValue = 0;
     popWord(tempValue, data+2);
-
-    sendCmdSpecial(DaliSpecialCmd::SET_DTR, DaliHelper::percentToArc(ColorHelper::getFloat(tempValue)));
+    logDebugP("set min %3.2f%%", ColorHelper::getFloat(tempValue) * 100);
+    sendCmdSpecial(DaliSpecialCmd::SET_DTR, DaliHelper::percentToArc(ColorHelper::getFloat(tempValue) * 100));
     sendCmd(data[1], DaliCmd::DTR_AS_MIN);
+    channel.setMinArc(DaliHelper::percentToArc(ColorHelper::getFloat(tempValue) * 100));
 
     popWord(tempValue, data+4);
-    sendCmdSpecial(DaliSpecialCmd::SET_DTR, (data[4] == 255) ? 255 : DaliHelper::percentToArc(ColorHelper::getFloat(tempValue)));
+    logDebugP("set max %3.2f%%", ColorHelper::getFloat(tempValue) * 100);
+    sendCmdSpecial(DaliSpecialCmd::SET_DTR, (data[4] == 255) ? 255 : DaliHelper::percentToArc(ColorHelper::getFloat(tempValue) * 100));
     sendCmd(data[1], DaliCmd::DTR_AS_MAX);
+    channel.setMaxArc(DaliHelper::percentToArc(ColorHelper::getFloat(tempValue) * 100));
 
     popWord(tempValue, data+6);
-    sendCmdSpecial(DaliSpecialCmd::SET_DTR, (data[6] == 255) ? 255 : DaliHelper::percentToArc(ColorHelper::getFloat(tempValue)));
+    if(tempValue == 0xFFFF)
+        logDebugP("set power disabled");
+    else
+        logDebugP("set power %3.2f", ColorHelper::getFloat(tempValue) * 100);
+    sendCmdSpecial(DaliSpecialCmd::SET_DTR, (tempValue == 0xFFFF) ? 255 : DaliHelper::percentToArc(ColorHelper::getFloat(tempValue) * 100));
     sendCmd(data[1], DaliCmd::DTR_AS_POWER_ON);
 
     popWord(tempValue, data+8);
-    sendCmdSpecial(DaliSpecialCmd::SET_DTR, (data[8] == 255) ? 255 : DaliHelper::percentToArc(ColorHelper::getFloat(tempValue)));
+    if(tempValue == 0xFFFF)
+        logDebugP("set fail disabled");
+    else
+        logDebugP("set fail %3.2f", ColorHelper::getFloat(tempValue) * 100);
+    sendCmdSpecial(DaliSpecialCmd::SET_DTR, (tempValue == 0xFFFF) ? 255 : DaliHelper::percentToArc(ColorHelper::getFloat(tempValue) * 100));
     sendCmd(data[1], DaliCmd::DTR_AS_FAIL);
 
+    switch ((data[10] >> 4) & 0xF) {
+        case 0:
+            logDebugP("set fade time inactive");
+            break;
+        case 1:
+            logDebugP("set fade time 0.7s");
+            break;
+        case 2:
+            logDebugP("set fade time 1.0s");
+            break;
+        case 3:
+            logDebugP("set fade time 1.4s");
+            break;
+        case 4:
+            logDebugP("set fade time 2.0s");
+            break;
+        case 5:
+            logDebugP("set fade time 2.8s");
+            break;
+        case 6:
+            logDebugP("set fade time 4.0s");
+            break;
+        case 7:
+            logDebugP("set fade time 5.7s");
+            break;
+        case 8:
+            logDebugP("set fade time 8.0s");
+            break;
+        case 9:
+            logDebugP("set fade time 11.3s");
+            break;
+        case 10:
+            logDebugP("set fade time 16.0s");
+            break;
+        case 11:
+            logDebugP("set fade time 22.6s");
+            break;
+        case 12:
+            logDebugP("set fade time 32.0s");
+            break;
+        case 13:
+            logDebugP("set fade time 45.3s");
+            break;
+        case 14:
+            logDebugP("set fade time 64.0s");
+            break;
+        case 15:
+            logDebugP("set fade time 90.5s");
+            break;
+        default:
+            logDebugP("set fade time unknown");
+            break;
+    }
     sendCmdSpecial(DaliSpecialCmd::SET_DTR, (data[10] >> 4) & 0xF);
     sendCmd(data[1], DaliCmd::DTR_AS_FADE_TIME);
+    switch(data[10] & 0xF)
+    {
+        case 1:
+            logDebugP("set fade rate 358 steps/s");
+            break;
+        case 2:
+            logDebugP("set fade rate 253 steps/s");
+            break;
+        case 3:
+            logDebugP("set fade rate 179 steps/s");
+            break;
+        case 4:
+            logDebugP("set fade rate 127 steps/s");
+            break;
+        case 5:
+            logDebugP("set fade rate 89.4 steps/s");
+            break;
+        case 6:
+            logDebugP("set fade rate 63.3 steps/s");
+            break;
+        case 7:
+            logDebugP("set fade rate 44.7 steps/s");
+            break;
+        case 8:
+            logDebugP("set fade rate 31.6 steps/s");
+            break;
+        case 9:
+            logDebugP("set fade rate 22.4 steps/s");
+            break;
+        case 10:
+            logDebugP("set fade rate 15.8 steps/s");
+            break;
+        case 11:
+            logDebugP("set fade rate 11.2 steps/s");
+            break;
+        case 12:
+            logDebugP("set fade rate 7.9 steps/s");
+            break;
+        case 13:
+            logDebugP("set fade rate 5.6 steps/s");
+            break;
+        case 14:
+            logDebugP("set fade rate 4.0 steps/s");
+            break;
+        case 15:
+            logDebugP("set fade rate 2.8 steps/s");
+            break;
+        default:
+            logDebugP("set fade rate unknwon");
+            break;
+    }
     sendCmdSpecial(DaliSpecialCmd::SET_DTR, data[10] & 0xF);
     sendCmd(data[1], DaliCmd::DTR_AS_FADE_RATE);
 
@@ -1293,11 +1404,14 @@ void DaliModule::funcHandleEvgWrite(uint8_t *data, uint8_t *resultData, uint8_t 
     {
         if((groups >> i) & 0x1)
         {
+            logDebugP("add to Group %i", i);
             sendMsg(MessageType::Cmd, data[1], DaliCmd::ADD_TO_GROUP | i);
         } else {
+            logDebugP("remove from Group %i", i);
             sendMsg(MessageType::Cmd, data[1], DaliCmd::REMOVE_FROM_GROUP | i);
         }
     }
+    logIndentDown();
 
     resultLength = 0;
 }
@@ -1405,11 +1519,12 @@ void DaliModule::funcHandleSetScene(uint8_t *data, uint8_t *resultData, uint8_t 
     uint8_t addr = data[1] & 0b1111;
     uint8_t type = data[1] >> 7;
 
-    logDebugP("Scene %i", data[2]);
     //scene is enabled
     if(data[3])
     {
-        logDebugP("Bri %i", data[6]);
+        logDebugP("Scene %i bri %i", data[2], data[6]);
+        logIndentUp();
+
         //deviceType is Color
         if(data[4] == PT_deviceType_DT8)
         {
@@ -1417,7 +1532,7 @@ void DaliModule::funcHandleSetScene(uint8_t *data, uint8_t *resultData, uint8_t 
             if(data[5] == PT_colorType_TW)
             {
                 uint16_t kelvin;
-                popWord(kelvin, data + 7);
+                popWord(kelvin, data + 8);
                 logDebugP("Temp %i", kelvin);
                 uint16_t mirek = 1000000.0 / kelvin;
                 logDebugP("mirek %i", mirek);
@@ -1426,22 +1541,28 @@ void DaliModule::funcHandleSetScene(uint8_t *data, uint8_t *resultData, uint8_t 
                 sendCmdSpecial(DaliSpecialCmd::ENABLE_DT, 0x08);
                 sendCmd(addr, DaliCmdExtendedDT8::SET_TEMP_COLOUR_TEMPERATURE, type);
             } else { //it is RGB
-                sendCmdSpecial(DaliSpecialCmd::SET_DTR, data[7]); 
-                sendCmdSpecial(DaliSpecialCmd::SET_DTR1, data[8]);
-                sendCmdSpecial(DaliSpecialCmd::SET_DTR2, data[9]);
+                sendCmdSpecial(DaliSpecialCmd::SET_DTR, data[8]); 
+                sendCmdSpecial(DaliSpecialCmd::SET_DTR1, data[9]);
+                sendCmdSpecial(DaliSpecialCmd::SET_DTR2, data[10]);
                 sendCmdSpecial(DaliSpecialCmd::ENABLE_DT, 0x08);
                 sendCmd(addr, DaliCmdExtendedDT8::SET_TEMP_RGB_LEVEL, type);
-                logDebugP("RGB %.2X%.2X%.2X", data[7], data[8], data[9]);
+                logDebugP("RGB %.2X%.2X%.2X", data[8], data[9], data[10]);
             }
         }
 
-        //set dimm value
-        sendCmdSpecial(DaliSpecialCmd::SET_DTR, DaliHelper::percentToArc(data[6]));
+        uint16_t tempValue = 0;
+        popWord(tempValue, data+6);
+        if(tempValue == 0xFFFF)
+            logDebugP("bri disabled");
+        else
+            logDebugP("bri %.2f%%", ColorHelper::getFloat(tempValue) * 100);
+
+        sendCmdSpecial(DaliSpecialCmd::SET_DTR, (tempValue == 0xFFFF) ? 255 : DaliHelper::percentToArc(ColorHelper::getFloat(tempValue) * 100));
         sendMsg(MessageType::Cmd, addr, DaliCmd::DTR_AS_SCENE | data[2], type);
-        //     sendMsg(MessageType::Cmd, data[1], DaliCmd::DTR_AS_SCENE | i);
+        logIndentDown();
     } else {
         sendMsg(MessageType::Cmd, addr, DaliCmd::REMOVE_FROM_SCENE | data[2], type);
-        logDebugP("disabled");
+        logDebugP("Scene %i disabled", data[2]);
     }
 
     resultLength = 0;
@@ -1541,7 +1662,6 @@ void DaliModule::stateHandleType(uint8_t *data, uint8_t *resultData, uint8_t &re
         resultData[0] = 0x00;
         resultLength = 1;
     } else {
-        logInfoP("Send Response %i", resp);
         if(resp >= 0)
         {
             resultData[0] = 0x01;

@@ -1037,15 +1037,14 @@ void DaliChannel::setGroupState(uint8_t group, uint8_t value)
         setDimmState(DaliHelper::percentToArc(value), true, true);
 }
 
-void DaliChannel::setMinMax(uint8_t min, uint8_t max)
-{
-    _min = DaliHelper::percentToArc(min);
-    _max = DaliHelper::percentToArc(max);
-}
-
 void DaliChannel::setMinArc(uint8_t min)
 {
     _min = min;
+}
+
+void DaliChannel::setMaxArc(uint8_t max)
+{
+    _max = max;
 }
 
 void DaliChannel::setHcl(uint8_t curve, uint16_t value)
