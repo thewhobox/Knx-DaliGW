@@ -68,17 +68,17 @@
 #define APP_funcBtn_Shift	4
 #define APP_funcBtn_Mask	0x0007
 // Offset: 0, BitOffset: 1, Size: 3 Bit, Text: Func Aktion Klick
-#define ParamAPP_funcBtn ((uint)((knx.paramByte(APP_funcBtn) >> APP_funcBtn_Shift) & APP_funcBtn_Mask))
+#define ParamAPP_funcBtn ((uint32_t)((knx.paramByte(APP_funcBtn) >> APP_funcBtn_Shift) & APP_funcBtn_Mask))
 #define APP_funcBtnDbl		0x0000
 #define APP_funcBtnDbl_Shift	1
 #define APP_funcBtnDbl_Mask	0x0007
 // Offset: 0, BitOffset: 4, Size: 3 Bit, Text: Func Aktion Doppelklick
-#define ParamAPP_funcBtnDbl ((uint)((knx.paramByte(APP_funcBtnDbl) >> APP_funcBtnDbl_Shift) & APP_funcBtnDbl_Mask))
+#define ParamAPP_funcBtnDbl ((uint32_t)((knx.paramByte(APP_funcBtnDbl) >> APP_funcBtnDbl_Shift) & APP_funcBtnDbl_Mask))
 #define APP_funcBtnLong		0x0001
 #define APP_funcBtnLong_Shift	5
 #define APP_funcBtnLong_Mask	0x0007
 // Offset: 1, Size: 3 Bit, Text: Func Aktion Langer Klick
-#define ParamAPP_funcBtnLong ((uint)((knx.paramByte(APP_funcBtnLong) >> APP_funcBtnLong_Shift) & APP_funcBtnLong_Mask))
+#define ParamAPP_funcBtnLong ((uint32_t)((knx.paramByte(APP_funcBtnLong) >> APP_funcBtnLong_Shift) & APP_funcBtnLong_Mask))
 //!< Number: 1, Text: Broadcast, Function: Schalten
 #define APP_Kobroadcast_switch 1
 #define KoAPP_broadcast_switch knx.getGroupObject(APP_Kobroadcast_switch)
@@ -124,9 +124,9 @@
 #define ADR_deviceType_Shift	4
 #define ADR_deviceType_Mask	0x000F
 // Offset: 0, Size: 4 Bit, Text: Gerätetyp
-#define ParamADR_deviceTypeIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_deviceType)) >> ADR_deviceType_Shift) & ADR_deviceType_Mask))
+#define ParamADR_deviceTypeIndex(X) ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_deviceType)) >> ADR_deviceType_Shift) & ADR_deviceType_Mask))
 // Offset: 0, Size: 4 Bit, Text: Gerätetyp
-#define ParamADR_deviceType ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_deviceType)) >> ADR_deviceType_Shift) & ADR_deviceType_Mask))
+#define ParamADR_deviceType ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_deviceType)) >> ADR_deviceType_Shift) & ADR_deviceType_Mask))
 #define ADR_type		0x0000
 // Offset: 0, BitOffset: 4, Size: 1 Bit, Text: Betriebsart
 #define ParamADR_typeIndex(X) knx.paramBit((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_type), 4)
@@ -168,30 +168,30 @@
 #define ADR_lockbehave_Shift	6
 #define ADR_lockbehave_Mask	0x0003
 // Offset: 7, Size: 2 Bit, Text: Verhalten bei Sperren
-#define ParamADR_lockbehaveIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_lockbehave)) >> ADR_lockbehave_Shift) & ADR_lockbehave_Mask))
+#define ParamADR_lockbehaveIndex(X) ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_lockbehave)) >> ADR_lockbehave_Shift) & ADR_lockbehave_Mask))
 // Offset: 7, Size: 2 Bit, Text: Verhalten bei Sperren
-#define ParamADR_lockbehave ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_lockbehave)) >> ADR_lockbehave_Shift) & ADR_lockbehave_Mask))
+#define ParamADR_lockbehave ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_lockbehave)) >> ADR_lockbehave_Shift) & ADR_lockbehave_Mask))
 #define ADR_lockvalue		0x0008
 #define ADR_lockvalue_Shift	1
 #define ADR_lockvalue_Mask	0x007F
 // Offset: 8, Size: 7 Bit, Text: 
-#define ParamADR_lockvalueIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_lockvalue)) >> ADR_lockvalue_Shift) & ADR_lockvalue_Mask))
+#define ParamADR_lockvalueIndex(X) ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_lockvalue)) >> ADR_lockvalue_Shift) & ADR_lockvalue_Mask))
 // Offset: 8, Size: 7 Bit, Text: 
-#define ParamADR_lockvalue ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_lockvalue)) >> ADR_lockvalue_Shift) & ADR_lockvalue_Mask))
+#define ParamADR_lockvalue ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_lockvalue)) >> ADR_lockvalue_Shift) & ADR_lockvalue_Mask))
 #define ADR_unlockbehave		0x0007
 #define ADR_unlockbehave_Shift	4
 #define ADR_unlockbehave_Mask	0x0003
 // Offset: 7, BitOffset: 2, Size: 2 Bit, Text: Verhalten bei Entsperren
-#define ParamADR_unlockbehaveIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_unlockbehave)) >> ADR_unlockbehave_Shift) & ADR_unlockbehave_Mask))
+#define ParamADR_unlockbehaveIndex(X) ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_unlockbehave)) >> ADR_unlockbehave_Shift) & ADR_unlockbehave_Mask))
 // Offset: 7, BitOffset: 2, Size: 2 Bit, Text: Verhalten bei Entsperren
-#define ParamADR_unlockbehave ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_unlockbehave)) >> ADR_unlockbehave_Shift) & ADR_unlockbehave_Mask))
+#define ParamADR_unlockbehave ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_unlockbehave)) >> ADR_unlockbehave_Shift) & ADR_unlockbehave_Mask))
 #define ADR_unlockvalue		0x0009
 #define ADR_unlockvalue_Shift	1
 #define ADR_unlockvalue_Mask	0x007F
 // Offset: 9, Size: 7 Bit, Text: 
-#define ParamADR_unlockvalueIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_unlockvalue)) >> ADR_unlockvalue_Shift) & ADR_unlockvalue_Mask))
+#define ParamADR_unlockvalueIndex(X) ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_unlockvalue)) >> ADR_unlockvalue_Shift) & ADR_unlockvalue_Mask))
 // Offset: 9, Size: 7 Bit, Text: 
-#define ParamADR_unlockvalue ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_unlockvalue)) >> ADR_unlockvalue_Shift) & ADR_unlockvalue_Mask))
+#define ParamADR_unlockvalue ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_unlockvalue)) >> ADR_unlockvalue_Shift) & ADR_unlockvalue_Mask))
 #define ADR_onDay		0x000A
 // Offset: 10, Size: 16 Bit (2 Byte), Text: Einschaltwert Tag
 #define ParamADR_onDayIndex(X) knx.paramFloat((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_onDay), Float_Enc_DPT9)
@@ -211,9 +211,9 @@
 #define ADR_colorType_Shift	1
 #define ADR_colorType_Mask	0x0003
 // Offset: 7, BitOffset: 5, Size: 2 Bit, Text: Farbe ansteuern per
-#define ParamADR_colorTypeIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_colorType)) >> ADR_colorType_Shift) & ADR_colorType_Mask))
+#define ParamADR_colorTypeIndex(X) ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_colorType)) >> ADR_colorType_Shift) & ADR_colorType_Mask))
 // Offset: 7, BitOffset: 5, Size: 2 Bit, Text: Farbe ansteuern per
-#define ParamADR_colorType ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_colorType)) >> ADR_colorType_Shift) & ADR_colorType_Mask))
+#define ParamADR_colorType ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_colorType)) >> ADR_colorType_Shift) & ADR_colorType_Mask))
 #define ADR_colorSpace		0x0007
 // Offset: 7, BitOffset: 7, Size: 1 Bit, Text: Farbe übertragen per
 #define ParamADR_colorSpaceIndex(X) knx.paramBit((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_colorSpace), 7)
@@ -221,14 +221,14 @@
 #define ParamADR_colorSpace knx.paramBit((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_colorSpace), 7)
 #define ADR_tempMin		0x000E
 // Offset: 14, Size: 16 Bit (2 Byte), Text: Farbtemperatur Min
-#define ParamADR_tempMinIndex(X) ((uint)((knx.paramWord((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_tempMin)))))
+#define ParamADR_tempMinIndex(X) ((uint32_t)((knx.paramWord((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_tempMin)))))
 // Offset: 14, Size: 16 Bit (2 Byte), Text: Farbtemperatur Min
-#define ParamADR_tempMin ((uint)((knx.paramWord((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_tempMin)))))
+#define ParamADR_tempMin ((uint32_t)((knx.paramWord((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_tempMin)))))
 #define ADR_tempMax		0x0010
 // Offset: 16, Size: 16 Bit (2 Byte), Text: Farbtemperatur Max
-#define ParamADR_tempMaxIndex(X) ((uint)((knx.paramWord((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_tempMax)))))
+#define ParamADR_tempMaxIndex(X) ((uint32_t)((knx.paramWord((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_tempMax)))))
 // Offset: 16, Size: 16 Bit (2 Byte), Text: Farbtemperatur Max
-#define ParamADR_tempMax ((uint)((knx.paramWord((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_tempMax)))))
+#define ParamADR_tempMax ((uint32_t)((knx.paramWord((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_tempMax)))))
 #define ADR_hcl		0x0008
 // Offset: 8, BitOffset: 7, Size: 1 Bit, Text: HCL aktivieren
 #define ParamADR_hclIndex(X) knx.paramBit((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_hcl), 7)
@@ -248,9 +248,9 @@
 #define ADR_dimmStateInterval_Shift	4
 #define ADR_dimmStateInterval_Mask	0x000F
 // Offset: 20, Size: 4 Bit, Text: Dimmstatus Interval bei relativ
-#define ParamADR_dimmStateIntervalIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_dimmStateInterval)) >> ADR_dimmStateInterval_Shift) & ADR_dimmStateInterval_Mask))
+#define ParamADR_dimmStateIntervalIndex(X) ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_dimmStateInterval)) >> ADR_dimmStateInterval_Shift) & ADR_dimmStateInterval_Mask))
 // Offset: 20, Size: 4 Bit, Text: Dimmstatus Interval bei relativ
-#define ParamADR_dimmStateInterval ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_dimmStateInterval)) >> ADR_dimmStateInterval_Shift) & ADR_dimmStateInterval_Mask))
+#define ParamADR_dimmStateInterval ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_dimmStateInterval)) >> ADR_dimmStateInterval_Shift) & ADR_dimmStateInterval_Mask))
 #define ADR_dimmRelDuration		0x0015
 // Offset: 21, Size: 8 Bit (1 Byte), Text: Dimmzeit von 0-100 % bei relativ
 #define ParamADR_dimmRelDurationIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_dimmRelDuration)))))
@@ -260,9 +260,9 @@
 #define ADR_hclCurve_Shift	2
 #define ADR_hclCurve_Mask	0x0003
 // Offset: 20, BitOffset: 4, Size: 2 Bit, Text: Verwende
-#define ParamADR_hclCurveIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_hclCurve)) >> ADR_hclCurve_Shift) & ADR_hclCurve_Mask))
+#define ParamADR_hclCurveIndex(X) ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_hclCurve)) >> ADR_hclCurve_Shift) & ADR_hclCurve_Mask))
 // Offset: 20, BitOffset: 4, Size: 2 Bit, Text: Verwende
-#define ParamADR_hclCurve ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_hclCurve)) >> ADR_hclCurve_Shift) & ADR_hclCurve_Mask))
+#define ParamADR_hclCurve ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_hclCurve)) >> ADR_hclCurve_Shift) & ADR_hclCurve_Mask))
 #define ADR_hclStart		0x0014
 // Offset: 20, BitOffset: 6, Size: 1 Bit, Text: HCL anwenden
 #define ParamADR_hclStartIndex(X) knx.paramBit((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_hclStart), 6)
@@ -272,9 +272,9 @@
 #define ADR_dimmLock_Shift	6
 #define ADR_dimmLock_Mask	0x0003
 // Offset: 22, Size: 2 Bit, Text: Einschalten bei relativ
-#define ParamADR_dimmLockIndex(X) ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_dimmLock)) >> ADR_dimmLock_Shift) & ADR_dimmLock_Mask))
+#define ParamADR_dimmLockIndex(X) ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_dimmLock)) >> ADR_dimmLock_Shift) & ADR_dimmLock_Mask))
 // Offset: 22, Size: 2 Bit, Text: Einschalten bei relativ
-#define ParamADR_dimmLock ((uint)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_dimmLock)) >> ADR_dimmLock_Shift) & ADR_dimmLock_Mask))
+#define ParamADR_dimmLock ((uint32_t)((knx.paramByte((ADR_ParamBlockOffset + ADR_ParamBlockSize * channelIndex() + ADR_dimmLock)) >> ADR_dimmLock_Shift) & ADR_dimmLock_Mask))
 #define ADR_hcl_manu_bri		0x0014
 // Offset: 20, BitOffset: 7, Size: 1 Bit, Text: Helligkeit geändert wird
 #define ParamADR_hcl_manu_briIndex(X) knx.paramBit((ADR_ParamBlockOffset + ADR_ParamBlockSize * X + ADR_hcl_manu_bri), 7)
@@ -381,9 +381,9 @@
 #define GRP_deviceType_Shift	6
 #define GRP_deviceType_Mask	0x0003
 // Offset: 0, Size: 2 Bit, Text: Gerätetyp
-#define ParamGRP_deviceTypeIndex(X) ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_deviceType)) >> GRP_deviceType_Shift) & GRP_deviceType_Mask))
+#define ParamGRP_deviceTypeIndex(X) ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_deviceType)) >> GRP_deviceType_Shift) & GRP_deviceType_Mask))
 // Offset: 0, Size: 2 Bit, Text: Gerätetyp
-#define ParamGRP_deviceType ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_deviceType)) >> GRP_deviceType_Shift) & GRP_deviceType_Mask))
+#define ParamGRP_deviceType ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_deviceType)) >> GRP_deviceType_Shift) & GRP_deviceType_Mask))
 #define GRP_type		0x0000
 // Offset: 0, BitOffset: 2, Size: 1 Bit, Text: Betriebsart
 #define ParamGRP_typeIndex(X) knx.paramBit((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_type), 2)
@@ -410,30 +410,30 @@
 #define GRP_lockbehave_Shift	1
 #define GRP_lockbehave_Mask	0x0003
 // Offset: 0, BitOffset: 5, Size: 2 Bit, Text: Verhalten bei Sperre
-#define ParamGRP_lockbehaveIndex(X) ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_lockbehave)) >> GRP_lockbehave_Shift) & GRP_lockbehave_Mask))
+#define ParamGRP_lockbehaveIndex(X) ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_lockbehave)) >> GRP_lockbehave_Shift) & GRP_lockbehave_Mask))
 // Offset: 0, BitOffset: 5, Size: 2 Bit, Text: Verhalten bei Sperre
-#define ParamGRP_lockbehave ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_lockbehave)) >> GRP_lockbehave_Shift) & GRP_lockbehave_Mask))
+#define ParamGRP_lockbehave ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_lockbehave)) >> GRP_lockbehave_Shift) & GRP_lockbehave_Mask))
 #define GRP_lockvalue		0x0003
 #define GRP_lockvalue_Shift	1
 #define GRP_lockvalue_Mask	0x007F
 // Offset: 3, Size: 7 Bit, Text: 
-#define ParamGRP_lockvalueIndex(X) ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_lockvalue)) >> GRP_lockvalue_Shift) & GRP_lockvalue_Mask))
+#define ParamGRP_lockvalueIndex(X) ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_lockvalue)) >> GRP_lockvalue_Shift) & GRP_lockvalue_Mask))
 // Offset: 3, Size: 7 Bit, Text: 
-#define ParamGRP_lockvalue ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_lockvalue)) >> GRP_lockvalue_Shift) & GRP_lockvalue_Mask))
+#define ParamGRP_lockvalue ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_lockvalue)) >> GRP_lockvalue_Shift) & GRP_lockvalue_Mask))
 #define GRP_unlockbehave		0x0004
 #define GRP_unlockbehave_Shift	6
 #define GRP_unlockbehave_Mask	0x0003
 // Offset: 4, Size: 2 Bit, Text: Verhalten bei Entsperren
-#define ParamGRP_unlockbehaveIndex(X) ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_unlockbehave)) >> GRP_unlockbehave_Shift) & GRP_unlockbehave_Mask))
+#define ParamGRP_unlockbehaveIndex(X) ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_unlockbehave)) >> GRP_unlockbehave_Shift) & GRP_unlockbehave_Mask))
 // Offset: 4, Size: 2 Bit, Text: Verhalten bei Entsperren
-#define ParamGRP_unlockbehave ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_unlockbehave)) >> GRP_unlockbehave_Shift) & GRP_unlockbehave_Mask))
+#define ParamGRP_unlockbehave ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_unlockbehave)) >> GRP_unlockbehave_Shift) & GRP_unlockbehave_Mask))
 #define GRP_unlockvalue		0x0005
 #define GRP_unlockvalue_Shift	1
 #define GRP_unlockvalue_Mask	0x007F
 // Offset: 5, Size: 7 Bit, Text: 
-#define ParamGRP_unlockvalueIndex(X) ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_unlockvalue)) >> GRP_unlockvalue_Shift) & GRP_unlockvalue_Mask))
+#define ParamGRP_unlockvalueIndex(X) ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_unlockvalue)) >> GRP_unlockvalue_Shift) & GRP_unlockvalue_Mask))
 // Offset: 5, Size: 7 Bit, Text: 
-#define ParamGRP_unlockvalue ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_unlockvalue)) >> GRP_unlockvalue_Shift) & GRP_unlockvalue_Mask))
+#define ParamGRP_unlockvalue ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_unlockvalue)) >> GRP_unlockvalue_Shift) & GRP_unlockvalue_Mask))
 #define GRP_onDay		0x0006
 // Offset: 6, Size: 16 Bit (2 Byte), Text: Einschaltwert Tag
 #define ParamGRP_onDayIndex(X) knx.paramFloat((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_onDay), Float_Enc_DPT9)
@@ -453,9 +453,9 @@
 #define GRP_colorType_Shift	4
 #define GRP_colorType_Mask	0x0003
 // Offset: 4, BitOffset: 2, Size: 2 Bit, Text: Farbe ansteuern per
-#define ParamGRP_colorTypeIndex(X) ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_colorType)) >> GRP_colorType_Shift) & GRP_colorType_Mask))
+#define ParamGRP_colorTypeIndex(X) ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_colorType)) >> GRP_colorType_Shift) & GRP_colorType_Mask))
 // Offset: 4, BitOffset: 2, Size: 2 Bit, Text: Farbe ansteuern per
-#define ParamGRP_colorType ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_colorType)) >> GRP_colorType_Shift) & GRP_colorType_Mask))
+#define ParamGRP_colorType ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_colorType)) >> GRP_colorType_Shift) & GRP_colorType_Mask))
 #define GRP_colorSpace		0x0003
 // Offset: 3, BitOffset: 7, Size: 1 Bit, Text: Farbe übertragen per
 #define ParamGRP_colorSpaceIndex(X) knx.paramBit((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_colorSpace), 7)
@@ -463,14 +463,14 @@
 #define ParamGRP_colorSpace knx.paramBit((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_colorSpace), 7)
 #define GRP_tempMin		0x000A
 // Offset: 10, Size: 16 Bit (2 Byte), Text: Farbtemperatur Min
-#define ParamGRP_tempMinIndex(X) ((uint)((knx.paramWord((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_tempMin)))))
+#define ParamGRP_tempMinIndex(X) ((uint32_t)((knx.paramWord((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_tempMin)))))
 // Offset: 10, Size: 16 Bit (2 Byte), Text: Farbtemperatur Min
-#define ParamGRP_tempMin ((uint)((knx.paramWord((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_tempMin)))))
+#define ParamGRP_tempMin ((uint32_t)((knx.paramWord((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_tempMin)))))
 #define GRP_tempMax		0x000C
 // Offset: 12, Size: 16 Bit (2 Byte), Text: Farbtemperatur Max
-#define ParamGRP_tempMaxIndex(X) ((uint)((knx.paramWord((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_tempMax)))))
+#define ParamGRP_tempMaxIndex(X) ((uint32_t)((knx.paramWord((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_tempMax)))))
 // Offset: 12, Size: 16 Bit (2 Byte), Text: Farbtemperatur Max
-#define ParamGRP_tempMax ((uint)((knx.paramWord((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_tempMax)))))
+#define ParamGRP_tempMax ((uint32_t)((knx.paramWord((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_tempMax)))))
 #define GRP_hcl		0x0004
 // Offset: 4, BitOffset: 4, Size: 1 Bit, Text: HCL aktivieren
 #define ParamGRP_hclIndex(X) knx.paramBit((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_hcl), 4)
@@ -485,9 +485,9 @@
 #define GRP_dimmStateInterval_Shift	4
 #define GRP_dimmStateInterval_Mask	0x000F
 // Offset: 14, Size: 4 Bit, Text: Dimmstatus Interval bei relativ
-#define ParamGRP_dimmStateIntervalIndex(X) ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_dimmStateInterval)) >> GRP_dimmStateInterval_Shift) & GRP_dimmStateInterval_Mask))
+#define ParamGRP_dimmStateIntervalIndex(X) ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_dimmStateInterval)) >> GRP_dimmStateInterval_Shift) & GRP_dimmStateInterval_Mask))
 // Offset: 14, Size: 4 Bit, Text: Dimmstatus Interval bei relativ
-#define ParamGRP_dimmStateInterval ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_dimmStateInterval)) >> GRP_dimmStateInterval_Shift) & GRP_dimmStateInterval_Mask))
+#define ParamGRP_dimmStateInterval ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_dimmStateInterval)) >> GRP_dimmStateInterval_Shift) & GRP_dimmStateInterval_Mask))
 #define GRP_queryTime		0x000F
 // Offset: 15, Size: 16 Bit (2 Byte), Text: Dimmwert abfragen (0 = deaktiviert)
 #define ParamGRP_queryTimeIndex(X) ((uint)((knx.paramWord((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_queryTime)))))
@@ -501,9 +501,9 @@
 #define GRP_hclCurve		0x0004
 #define GRP_hclCurve_Mask	0x0003
 // Offset: 4, BitOffset: 6, Size: 2 Bit, Text: Verwende
-#define ParamGRP_hclCurveIndex(X) ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_hclCurve))) & GRP_hclCurve_Mask))
+#define ParamGRP_hclCurveIndex(X) ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_hclCurve))) & GRP_hclCurve_Mask))
 // Offset: 4, BitOffset: 6, Size: 2 Bit, Text: Verwende
-#define ParamGRP_hclCurve ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_hclCurve))) & GRP_hclCurve_Mask))
+#define ParamGRP_hclCurve ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_hclCurve))) & GRP_hclCurve_Mask))
 #define GRP_hclStart		0x0005
 // Offset: 5, BitOffset: 7, Size: 1 Bit, Text: HCL anwenden
 #define ParamGRP_hclStartIndex(X) knx.paramBit((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_hclStart), 7)
@@ -513,9 +513,9 @@
 #define GRP_dimmLock_Shift	2
 #define GRP_dimmLock_Mask	0x0003
 // Offset: 14, BitOffset: 4, Size: 2 Bit, Text: Einschalten bei rlativ
-#define ParamGRP_dimmLockIndex(X) ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_dimmLock)) >> GRP_dimmLock_Shift) & GRP_dimmLock_Mask))
+#define ParamGRP_dimmLockIndex(X) ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_dimmLock)) >> GRP_dimmLock_Shift) & GRP_dimmLock_Mask))
 // Offset: 14, BitOffset: 4, Size: 2 Bit, Text: Einschalten bei rlativ
-#define ParamGRP_dimmLock ((uint)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_dimmLock)) >> GRP_dimmLock_Shift) & GRP_dimmLock_Mask))
+#define ParamGRP_dimmLock ((uint32_t)((knx.paramByte((GRP_ParamBlockOffset + GRP_ParamBlockSize * channelIndex() + GRP_dimmLock)) >> GRP_dimmLock_Shift) & GRP_dimmLock_Mask))
 #define GRP_hcl_manu_bri		0x000E
 // Offset: 14, BitOffset: 6, Size: 1 Bit, Text: Helligkeit geändert wird
 #define ParamGRP_hcl_manu_briIndex(X) knx.paramBit((GRP_ParamBlockOffset + GRP_ParamBlockSize * X + GRP_hcl_manu_bri), 6)
@@ -618,9 +618,9 @@
 #define SCE_type_Shift	6
 #define SCE_type_Mask	0x0003
 // Offset: 0, Size: 2 Bit, Text: Senden an
-#define ParamSCE_typeIndex(X) ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_type)) >> SCE_type_Shift) & SCE_type_Mask))
+#define ParamSCE_typeIndex(X) ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_type)) >> SCE_type_Shift) & SCE_type_Mask))
 // Offset: 0, Size: 2 Bit, Text: Senden an
-#define ParamSCE_type ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_type)) >> SCE_type_Shift) & SCE_type_Mask))
+#define ParamSCE_type ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_type)) >> SCE_type_Shift) & SCE_type_Mask))
 #define SCE_save		0x0000
 // Offset: 0, BitOffset: 2, Size: 1 Bit, Text: Speichern erlauben
 #define ParamSCE_saveIndex(X) knx.paramBit((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_save), 2)
@@ -630,56 +630,56 @@
 #define SCE_numberKnx_Shift	1
 #define SCE_numberKnx_Mask	0x007F
 // Offset: 1, Size: 7 Bit, Text: Szenennummer Knx
-#define ParamSCE_numberKnxIndex(X) ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_numberKnx)) >> SCE_numberKnx_Shift) & SCE_numberKnx_Mask))
+#define ParamSCE_numberKnxIndex(X) ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_numberKnx)) >> SCE_numberKnx_Shift) & SCE_numberKnx_Mask))
 // Offset: 1, Size: 7 Bit, Text: Szenennummer Knx
-#define ParamSCE_numberKnx ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_numberKnx)) >> SCE_numberKnx_Shift) & SCE_numberKnx_Mask))
+#define ParamSCE_numberKnx ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_numberKnx)) >> SCE_numberKnx_Shift) & SCE_numberKnx_Mask))
 #define SCE_numberDali		0x0000
 #define SCE_numberDali_Shift	1
 #define SCE_numberDali_Mask	0x000F
 // Offset: 0, BitOffset: 3, Size: 4 Bit, Text: Szenennummer Dali
-#define ParamSCE_numberDaliIndex(X) ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_numberDali)) >> SCE_numberDali_Shift) & SCE_numberDali_Mask))
+#define ParamSCE_numberDaliIndex(X) ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_numberDali)) >> SCE_numberDali_Shift) & SCE_numberDali_Mask))
 // Offset: 0, BitOffset: 3, Size: 4 Bit, Text: Szenennummer Dali
-#define ParamSCE_numberDali ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_numberDali)) >> SCE_numberDali_Shift) & SCE_numberDali_Mask))
+#define ParamSCE_numberDali ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_numberDali)) >> SCE_numberDali_Shift) & SCE_numberDali_Mask))
 #define SCE_address		0x0002
 #define SCE_address_Shift	2
 #define SCE_address_Mask	0x003F
 // Offset: 2, Size: 6 Bit, Text: Dali Adresse
-#define ParamSCE_addressIndex(X) ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_address)) >> SCE_address_Shift) & SCE_address_Mask))
+#define ParamSCE_addressIndex(X) ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_address)) >> SCE_address_Shift) & SCE_address_Mask))
 // Offset: 2, Size: 6 Bit, Text: Dali Adresse
-#define ParamSCE_address ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_address)) >> SCE_address_Shift) & SCE_address_Mask))
+#define ParamSCE_address ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_address)) >> SCE_address_Shift) & SCE_address_Mask))
 #define SCE_group		0x0003
 #define SCE_group_Shift	4
 #define SCE_group_Mask	0x000F
 // Offset: 3, Size: 4 Bit, Text: Dali Gruppe
-#define ParamSCE_groupIndex(X) ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_group)) >> SCE_group_Shift) & SCE_group_Mask))
+#define ParamSCE_groupIndex(X) ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * X + SCE_group)) >> SCE_group_Shift) & SCE_group_Mask))
 // Offset: 3, Size: 4 Bit, Text: Dali Gruppe
-#define ParamSCE_group ((uint)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_group)) >> SCE_group_Shift) & SCE_group_Mask))
+#define ParamSCE_group ((uint32_t)((knx.paramByte((SCE_ParamBlockOffset + SCE_ParamBlockSize * channelIndex() + SCE_group)) >> SCE_group_Shift) & SCE_group_Mask))
 
 //-----Module: hcl
 #define HCL_type		0x0000
 #define HCL_type_Shift	6
 #define HCL_type_Mask	0x0003
 // Offset: 0, Size: 2 Bit, Text: Ansteuerung über
-#define ParamHCL_typeIndex(X) ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_type)) >> HCL_type_Shift) & HCL_type_Mask))
+#define ParamHCL_typeIndex(X) ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_type)) >> HCL_type_Shift) & HCL_type_Mask))
 // Offset: 0, Size: 2 Bit, Text: Ansteuerung über
-#define ParamHCL_type ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_type)) >> HCL_type_Shift) & HCL_type_Mask))
+#define ParamHCL_type ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_type)) >> HCL_type_Shift) & HCL_type_Mask))
 #define HCL_min		0x0001
 // Offset: 1, Size: 16 Bit (2 Byte), Text: Farbtemperatur Min
-#define ParamHCL_minIndex(X) ((uint)((knx.paramWord((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_min)))))
+#define ParamHCL_minIndex(X) ((uint32_t)((knx.paramWord((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_min)))))
 // Offset: 1, Size: 16 Bit (2 Byte), Text: Farbtemperatur Min
-#define ParamHCL_min ((uint)((knx.paramWord((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_min)))))
+#define ParamHCL_min ((uint32_t)((knx.paramWord((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_min)))))
 #define HCL_max		0x0003
 // Offset: 3, Size: 16 Bit (2 Byte), Text: Farbtemperatur Max
-#define ParamHCL_maxIndex(X) ((uint)((knx.paramWord((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_max)))))
+#define ParamHCL_maxIndex(X) ((uint32_t)((knx.paramWord((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_max)))))
 // Offset: 3, Size: 16 Bit (2 Byte), Text: Farbtemperatur Max
-#define ParamHCL_max ((uint)((knx.paramWord((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_max)))))
+#define ParamHCL_max ((uint32_t)((knx.paramWord((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_max)))))
 #define HCL_offsetRiseType		0x0000
 #define HCL_offsetRiseType_Shift	4
 #define HCL_offsetRiseType_Mask	0x0003
 // Offset: 0, BitOffset: 2, Size: 2 Bit, Text: Verschiebe Sonnenaufgang
-#define ParamHCL_offsetRiseTypeIndex(X) ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_offsetRiseType)) >> HCL_offsetRiseType_Shift) & HCL_offsetRiseType_Mask))
+#define ParamHCL_offsetRiseTypeIndex(X) ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_offsetRiseType)) >> HCL_offsetRiseType_Shift) & HCL_offsetRiseType_Mask))
 // Offset: 0, BitOffset: 2, Size: 2 Bit, Text: Verschiebe Sonnenaufgang
-#define ParamHCL_offsetRiseType ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_offsetRiseType)) >> HCL_offsetRiseType_Shift) & HCL_offsetRiseType_Mask))
+#define ParamHCL_offsetRiseType ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_offsetRiseType)) >> HCL_offsetRiseType_Shift) & HCL_offsetRiseType_Mask))
 #define HCL_offsetRiseMin		0x0005
 // Offset: 5, Size: 8 Bit (1 Byte), Text: 
 #define ParamHCL_offsetRiseMinIndex(X) ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_offsetRiseMin)))))
@@ -689,9 +689,9 @@
 #define HCL_offsetSetType_Shift	2
 #define HCL_offsetSetType_Mask	0x0003
 // Offset: 0, BitOffset: 4, Size: 2 Bit, Text: Verschiebe Sonnenuntergang
-#define ParamHCL_offsetSetTypeIndex(X) ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_offsetSetType)) >> HCL_offsetSetType_Shift) & HCL_offsetSetType_Mask))
+#define ParamHCL_offsetSetTypeIndex(X) ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_offsetSetType)) >> HCL_offsetSetType_Shift) & HCL_offsetSetType_Mask))
 // Offset: 0, BitOffset: 4, Size: 2 Bit, Text: Verschiebe Sonnenuntergang
-#define ParamHCL_offsetSetType ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_offsetSetType)) >> HCL_offsetSetType_Shift) & HCL_offsetSetType_Mask))
+#define ParamHCL_offsetSetType ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_offsetSetType)) >> HCL_offsetSetType_Shift) & HCL_offsetSetType_Mask))
 #define HCL_offsetSetMin		0x0006
 // Offset: 6, Size: 8 Bit (1 Byte), Text: 
 #define ParamHCL_offsetSetMinIndex(X) ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_offsetSetMin)))))
@@ -701,16 +701,16 @@
 #define HCL_briMin_Shift	1
 #define HCL_briMin_Mask	0x007F
 // Offset: 7, Size: 7 Bit, Text: Helligkeit Min
-#define ParamHCL_briMinIndex(X) ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_briMin)) >> HCL_briMin_Shift) & HCL_briMin_Mask))
+#define ParamHCL_briMinIndex(X) ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_briMin)) >> HCL_briMin_Shift) & HCL_briMin_Mask))
 // Offset: 7, Size: 7 Bit, Text: Helligkeit Min
-#define ParamHCL_briMin ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_briMin)) >> HCL_briMin_Shift) & HCL_briMin_Mask))
+#define ParamHCL_briMin ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_briMin)) >> HCL_briMin_Shift) & HCL_briMin_Mask))
 #define HCL_briMax		0x0008
 #define HCL_briMax_Shift	1
 #define HCL_briMax_Mask	0x007F
 // Offset: 8, Size: 7 Bit, Text: Helligkeit Max
-#define ParamHCL_briMaxIndex(X) ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_briMax)) >> HCL_briMax_Shift) & HCL_briMax_Mask))
+#define ParamHCL_briMaxIndex(X) ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_briMax)) >> HCL_briMax_Shift) & HCL_briMax_Mask))
 // Offset: 8, Size: 7 Bit, Text: Helligkeit Max
-#define ParamHCL_briMax ((uint)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_briMax)) >> HCL_briMax_Shift) & HCL_briMax_Mask))
+#define ParamHCL_briMax ((uint32_t)((knx.paramByte((HCL_ParamBlockOffset + HCL_ParamBlockSize * channelIndex() + HCL_briMax)) >> HCL_briMax_Shift) & HCL_briMax_Mask))
 #define HCL_checkTemperature		0x0000
 // Offset: 0, BitOffset: 6, Size: 1 Bit, Text: Farbtemperatur aktivieren
 #define ParamHCL_checkTemperatureIndex(X) knx.paramBit((HCL_ParamBlockOffset + HCL_ParamBlockSize * X + HCL_checkTemperature), 6)
@@ -735,46 +735,46 @@
 #define BASE_StartupDelayBase_Shift	6
 #define BASE_StartupDelayBase_Mask	0x0003
 // UnionOffset: 0, ParaOffset: 0, Size: 2 Bit, Text: Zeitbasis
-#define ParamBASE_StartupDelayBase ((uint)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_StartupDelayBase)) >> BASE_StartupDelayBase_Shift) & BASE_StartupDelayBase_Mask))
+#define ParamBASE_StartupDelayBase ((uint32_t)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_StartupDelayBase)) >> BASE_StartupDelayBase_Shift) & BASE_StartupDelayBase_Mask))
 #define BASE_StartupDelayTime		0x0000
 #define BASE_StartupDelayTime_Mask	0x3FFF
 // UnionOffset: 0, ParaOffset: 0, BitOffset: 2, Size: 14 Bit, Text: Zeit
-#define ParamBASE_StartupDelayTime ((uint)((knx.paramWord((BASE_Share_ParamBlockOffset + BASE_StartupDelayTime))) & BASE_StartupDelayTime_Mask))
+#define ParamBASE_StartupDelayTime ((uint32_t)((knx.paramWord((BASE_Share_ParamBlockOffset + BASE_StartupDelayTime))) & BASE_StartupDelayTime_Mask))
 #define ParamBASE_StartupDelayTimeMS (paramDelay(ParamBASE_StartupDelayTime))
 #define BASE_HeartbeatDelayBase		0x0002
 #define BASE_HeartbeatDelayBase_Shift	6
 #define BASE_HeartbeatDelayBase_Mask	0x0003
 // UnionOffset: 0, ParaOffset: 2, Size: 2 Bit, Text: Zeitbasis
-#define ParamBASE_HeartbeatDelayBase ((uint)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_HeartbeatDelayBase)) >> BASE_HeartbeatDelayBase_Shift) & BASE_HeartbeatDelayBase_Mask))
+#define ParamBASE_HeartbeatDelayBase ((uint32_t)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_HeartbeatDelayBase)) >> BASE_HeartbeatDelayBase_Shift) & BASE_HeartbeatDelayBase_Mask))
 #define BASE_HeartbeatDelayTime		0x0002
 #define BASE_HeartbeatDelayTime_Mask	0x3FFF
 // UnionOffset: 0, ParaOffset: 2, BitOffset: 2, Size: 14 Bit, Text: Zeit
-#define ParamBASE_HeartbeatDelayTime ((uint)((knx.paramWord((BASE_Share_ParamBlockOffset + BASE_HeartbeatDelayTime))) & BASE_HeartbeatDelayTime_Mask))
+#define ParamBASE_HeartbeatDelayTime ((uint32_t)((knx.paramWord((BASE_Share_ParamBlockOffset + BASE_HeartbeatDelayTime))) & BASE_HeartbeatDelayTime_Mask))
 #define ParamBASE_HeartbeatDelayTimeMS (paramDelay(ParamBASE_HeartbeatDelayTime))
 #define BASE_Timezone		0x0004
 #define BASE_Timezone_Shift	3
 #define BASE_Timezone_Mask	0x001F
 // UnionOffset: 4, ParaOffset: 0, Size: 5 Bit, Text: Zeitzone
-#define ParamBASE_Timezone ((uint)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_Timezone)) >> BASE_Timezone_Shift) & BASE_Timezone_Mask))
+#define ParamBASE_Timezone ((uint32_t)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_Timezone)) >> BASE_Timezone_Shift) & BASE_Timezone_Mask))
 #define BASE_CombinedTimeDate		0x0004
 // UnionOffset: 4, ParaOffset: 0, BitOffset: 5, Size: 1 Bit, Text: Empfangen über
 #define ParamBASE_CombinedTimeDate knx.paramBit((BASE_Share_ParamBlockOffset + BASE_CombinedTimeDate), 5)
 #define BASE_SummertimeAll		0x0004
 #define BASE_SummertimeAll_Mask	0x0003
 // UnionOffset: 4, ParaOffset: 0, BitOffset: 6, Size: 2 Bit, Text: Sommerzeit ermitteln durch
-#define ParamBASE_SummertimeAll ((uint)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_SummertimeAll))) & BASE_SummertimeAll_Mask))
+#define ParamBASE_SummertimeAll ((uint32_t)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_SummertimeAll))) & BASE_SummertimeAll_Mask))
 #define BASE_SummertimeDE		0x0004
 #define BASE_SummertimeDE_Mask	0x0003
 // UnionOffset: 4, ParaOffset: 0, BitOffset: 6, Size: 2 Bit, Text: Sommerzeit ermitteln durch
-#define ParamBASE_SummertimeDE ((uint)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_SummertimeDE))) & BASE_SummertimeDE_Mask))
+#define ParamBASE_SummertimeDE ((uint32_t)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_SummertimeDE))) & BASE_SummertimeDE_Mask))
 #define BASE_SummertimeWorld		0x0004
 #define BASE_SummertimeWorld_Mask	0x0003
 // UnionOffset: 4, ParaOffset: 0, BitOffset: 6, Size: 2 Bit, Text: Sommerzeit ermitteln durch
-#define ParamBASE_SummertimeWorld ((uint)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_SummertimeWorld))) & BASE_SummertimeWorld_Mask))
+#define ParamBASE_SummertimeWorld ((uint32_t)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_SummertimeWorld))) & BASE_SummertimeWorld_Mask))
 #define BASE_SummertimeKO		0x0004
 #define BASE_SummertimeKO_Mask	0x0003
 // UnionOffset: 4, ParaOffset: 0, BitOffset: 6, Size: 2 Bit, Text: Sommerzeit ermitteln durch
-#define ParamBASE_SummertimeKO ((uint)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_SummertimeKO))) & BASE_SummertimeKO_Mask))
+#define ParamBASE_SummertimeKO ((uint32_t)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_SummertimeKO))) & BASE_SummertimeKO_Mask))
 #define BASE_Latitude		0x0005
 // UnionOffset: 5, ParaOffset: 0, Size: 16 Bit (2 Byte), Text: Breitengrad
 #define ParamBASE_Latitude knx.paramFloat((BASE_Share_ParamBlockOffset + BASE_Latitude), Float_Enc_IEEE754Single)
@@ -796,10 +796,10 @@
 #define BASE_ManualSave		0x000D
 #define BASE_ManualSave_Mask	0x0007
 // UnionOffset: 13, ParaOffset: 0, BitOffset: 5, Size: 3 Bit, Text: Manuelles speichern
-#define ParamBASE_ManualSave ((uint)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_ManualSave))) & BASE_ManualSave_Mask))
+#define ParamBASE_ManualSave ((uint32_t)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_ManualSave))) & BASE_ManualSave_Mask))
 #define BASE_PeriodicSave		0x000E
 // UnionOffset: 13, ParaOffset: 1, Size: 8 Bit (1 Byte), Text: Zyklisches speichern
-#define ParamBASE_PeriodicSave ((uint)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_PeriodicSave)))))
+#define ParamBASE_PeriodicSave ((uint32_t)((knx.paramByte((BASE_Share_ParamBlockOffset + BASE_PeriodicSave)))))
 //!< Number: 0, Text: In Betrieb, Function: Zyklisch
 #define BASE_KoHeartbeat 0
 #define KoBASE_Heartbeat knx.getGroupObject(BASE_KoHeartbeat + BASE_Share_KoOffset)

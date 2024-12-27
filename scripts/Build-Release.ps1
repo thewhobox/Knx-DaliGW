@@ -32,11 +32,9 @@ if (!$?) { exit 1 }
 
 # build firmware based on generated headerfile 
 
-# build firmware for PiPico-BCU-Connector
 lib/OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_REG1_V0 firmware-REG1-v0 uf2
 if (!$?) { exit 1 }
 
-# build firmware for 1TE-RP2040-SmartMF
 lib/OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_REG1_V1 firmware-REG1-v1 uf2
 if (!$?) { exit 1 }
 
