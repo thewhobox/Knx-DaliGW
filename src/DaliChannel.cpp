@@ -414,8 +414,9 @@ void DaliChannel::koHandleHclCurve(GroupObject &ko)
 
 void DaliChannel::koHandleScene(GroupObject &ko)
 {
-    uint8_t number = ko.value(Dpt(5,0));
-    if(number > 2)
+    uint8_t number = ko.value(Dpt(17,1));
+    logDebugP("Szene KNX %i to DALI %i", number + 1, number);
+    if(number > 15)
     {
         logErrorP("Szene ignoriert, da zu hoch: %i, max 15", number);
         return;

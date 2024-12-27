@@ -23,9 +23,7 @@ void setup()
 	//openknxDaliModule.setCallback(daliCallback);
 	openknx.addModule(1, openknxDaliModule);
 	openknx.addModule(2, openknxTimerModule);
-#ifdef ARDUINO_ARCH_RP2040
 	openknx.addModule(3, openknxFileTransferModule);
-#endif
 	openknx.setup();
 
 #ifdef ARDUINO_ARCH_RP2040
