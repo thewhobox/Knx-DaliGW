@@ -139,9 +139,10 @@ void DaliModule::setup1(bool conf)
     alarm_pool_t *_alarmPool1 = alarm_pool_create(2, 16);
     alarm_pool_add_repeating_timer_us(_alarmPool1, -417, daliTimerInterruptCallback, NULL, &_timer);
     #endif
-    DaliBus.errorCallback = [](daliReturnValue errorCode) {
+    // TODO make this dali channel able
+    dali->setErrorCallback([](daliReturnValue errorCode) {
         _lastDaliError = errorCode;
-    };
+    });
     dali->setActivityCallback([] {
         daliActivity = millis();
     });
@@ -344,10 +345,10 @@ void DaliModule::loopMessages()
                 logError("Dali", "Cant be high");
                 break;
             case DALI_INVALID_STARTBIT:
-                logError("Dali", "Invalid Startbit (%i/%i)", DaliBus.tempBusLevel, DaliBus.tempDelta);
+                logError("Dali", "Invalid Startbit"); //, DaliBus.tempBusLevel, DaliBus.tempDelta);
                 break;
             case DALI_ERROR_TIMING:
-                logError("Dali", "Error Timing (%i)", DaliBus.tempDelta);
+                logError("Dali", "Error Timing"); //, DaliBus.tempDelta);
                 break;
             default:
                 logError("Dali", "Unknown Error %i", _lastDaliError);
@@ -392,7 +393,7 @@ void DaliModule::loopMessages()
 
 void DaliModule::loopAddressing()
 {
-  if (DaliBus.busIsIdle()) { // wait until bus is idle
+  if (dali->busIsIdle()) { // wait until bus is idle
     switch (_adrState) {
       case AddressingState::INIT:
         _adrFound = 0;
@@ -439,7 +440,7 @@ void DaliModule::loopAddressing()
         _adrState = AddressingState::RANDOMWAIT;
         break;
       case AddressingState::RANDOMWAIT:  // wait 100ms for random address to generate
-        if (DaliBus.busIdleCount >= 255)
+        if (dali->busIdleCount() >= 255)
           _adrState = AddressingState::STARTSEARCH;
         break;
       case AddressingState::STARTSEARCH:
@@ -500,7 +501,7 @@ void DaliModule::loopAddressing()
         }
       case AddressingState::GETSHORT:
         {
-        int response = DaliBus.getLastResponse();
+        int response = dali->busGetLastResponse();
         if(response < 0)
         {
             logErrorP("Dali Error %i", response);
@@ -532,7 +533,7 @@ void DaliModule::loopAddressing()
         _adrState = AddressingState::VERIFYSHORTRESPONSE;
         break;
       case AddressingState::VERIFYSHORTRESPONSE:
-        if (DaliBus.getLastResponse() == 0xFF) {
+        if (dali->busGetLastResponse() == 0xFF) {
           _adrState = AddressingState::WITHDRAW;
           logErrorP(" -> new address %i", _adrNew);
         } else {
@@ -556,7 +557,7 @@ void DaliModule::loopAddressing()
         break;
       case AddressingState::CHECKSEARCHSHORT:
         {
-            int response = DaliBus.getLastResponse();
+            int response = dali->busGetLastResponse();
             addresses[_adrFound] = response >= 0;
             _adrFound++;
             _adrState = _adrFound < 64 ? AddressingState::SEARCHSHORT : AddressingState::INIT;
@@ -568,7 +569,7 @@ void DaliModule::loopAddressing()
 
 void DaliModule::loopAssigning()
 {
-  if (DaliBus.busIsIdle()) { // wait until bus is idle
+  if (dali->busIsIdle()) { // wait until bus is idle
     switch (_assState) {
       case AssigningState::INIT:
         _adrFound = 0;
@@ -595,7 +596,7 @@ void DaliModule::loopAssigning()
         break;
       case AssigningState::CHECKQUERY:
         {  // create scope for response variable
-        int response = DaliBus.getLastResponse();
+        int response = dali->busGetLastResponse();
         if(response == DALI_RX_EMPTY)
         {
             logInfoP("Short Address is free");
@@ -647,7 +648,7 @@ void DaliModule::loopAssigning()
         break;
       case AssigningState::CHECKFOUND:
         {  // create scope for response variable
-        int response = DaliBus.getLastResponse();
+        int response = dali->busGetLastResponse();
         logInfoP("resp %i", response);
         if(response == DALI_RX_EMPTY)
         {
@@ -669,7 +670,7 @@ void DaliModule::loopAssigning()
         _assState = AssigningState::VERIFYSHORTRESPONSE;
         break;
       case AssigningState::VERIFYSHORTRESPONSE:
-        if (DaliBus.getLastResponse() == 0xFF) {
+        if (dali->busGetLastResponse() == 0xFF) {
           logErrorP(" -> new address %i", _adrNew);
         } else {
           // error, stop commissioning

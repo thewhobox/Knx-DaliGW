@@ -1,11 +1,8 @@
 #include <Arduino.h>
-#include "TimerInterrupt_Generic.h"
 #include "OpenKNX.h"
 #include "DaliModule.h"
 #include "TimerModule.h"
-#ifdef ARDUINO_ARCH_RP2040
 #include "FileTransferModule.h"
-#endif
 
 
 void daliCallback(uint8_t *data, uint8_t len)
