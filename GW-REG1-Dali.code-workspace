@@ -86,7 +86,8 @@
 			"typeinfo": "cpp",
 			"valarray": "cpp",
 			"variant": "cpp",
-			"queue": "cpp"
+			"queue": "cpp",
+			"stack": "cpp"
 		}
 	}
 }
