@@ -27,8 +27,8 @@ class DaliChannel : public OpenKNX::Channel
 		void init(uint8_t channelIndex, bool isGroup);
 		void setOnValue(uint8_t value);
 		void setGroups(uint16_t groups);
-		void setGroupState(uint8_t group, bool state);
-		void setGroupState(uint8_t group, uint8_t value);
+		void setGroupState(uint16_t group, bool state);
+		void setGroupState(uint16_t group, uint8_t value);
 		void setMinArc(uint8_t max);
 		void setMaxArc(uint8_t max);
 		void setHcl(uint8_t curve, uint16_t temp);

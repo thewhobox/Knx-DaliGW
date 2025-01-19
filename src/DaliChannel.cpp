@@ -51,7 +51,7 @@ void DaliChannel::setup()
 
         _isStaircase = ParamGRP_type;
         _min = 0;
-        _max = 0xFF;
+        _max = 100;
         if (_isStaircase)
             interval = ParamGRP_stairtime;
         _onDay = DaliHelper::percentToArc((float)ParamGRP_onDay);
@@ -144,7 +144,7 @@ void DaliChannel::loopDimming()
                     updateCurrentDimmValue();
                 }else if (*currentDimmValue >= _max)
                 {
-                    logDebugP("Dimm Stop at max %i", _max);
+                    logDebugP("Dimm Stop at max %i (%i)", _max, *currentDimmValue);
                     _dimmDirection = DimmDirection::None;
                     updateCurrentDimmValue();
                 }
@@ -306,12 +306,12 @@ void DaliChannel::processInputKo(GroupObject &ko)
     if (_isGroup)
     {
         chanIndex = (ko.asap() - GRP_KoOffset) % GRP_KoBlockSize;
-        logDebugP("Got GROUP KO %i", chanIndex);
+        //logDebugP("Got GROUP KO %i", chanIndex);
     }
     else
     {
         chanIndex = (ko.asap() - ADR_KoOffset) % ADR_KoBlockSize;
-        logDebugP("Got SHORT KO %i", chanIndex);
+        //logDebugP("Got SHORT KO %i", chanIndex);
     }
 
     switch (chanIndex)
@@ -403,7 +403,7 @@ void DaliChannel::processInputKo(GroupObject &ko)
 
 void DaliChannel::koHandleHclCurve(GroupObject &ko)
 {
-    uint8_t curve = ko.value(Dpt(5,0));
+    uint8_t curve = ko.value(Dpt(5,1));
     if(curve > 2)
     {
         logErrorP("Setzen der HCL Kurve ignoriert, da zu hoch: %i, max %i", curve, 2);
@@ -516,7 +516,7 @@ void DaliChannel::handleSwitchNormal(GroupObject &ko)
         sendArc(onValue);
         if(_hclCurve != 255 && _hclIsAutoMode)
             setTemperature(_hclCurrentTemp);
-        setDimmState(DaliHelper::percentToArc(onValue), true);
+        setDimmState(onValue, true);
     }
     else
     {
@@ -946,8 +946,8 @@ void DaliChannel::setSwitchState(bool value, bool isSwitchCommand)
     logDebugP("AutoConfSwitch %i %i %i", value, ParamADR_hcl_auto_off, _hclIsAutoMode);
 
     bool currentState = knx.getGroupObject(calcKoNumber(_isGroup ? GRP_Koswitch_state : ADR_Koswitch_state)).value(DPT_Switch);
-    if (value == currentState)
-        return;
+    // if (value == currentState)
+    //     return;
     knx.getGroupObject(calcKoNumber(_isGroup ? GRP_Koswitch_state : ADR_Koswitch_state)).value(value, DPT_Switch);
 }
 
@@ -1026,16 +1026,16 @@ void DaliChannel::setGroups(uint16_t groups)
     _groups = groups;
 }
 
-void DaliChannel::setGroupState(uint8_t group, bool state)
+void DaliChannel::setGroupState(uint16_t group, bool state)
 {
-    if (_groups & 1 << group)
+    if (group == 0xFFFF || _groups & 1 << group)
         setSwitchState(state, false);
 }
 
-void DaliChannel::setGroupState(uint8_t group, uint8_t value)
+void DaliChannel::setGroupState(uint16_t group, uint8_t value)
 {
-    if (_groups & (1 << group))
-        setDimmState(DaliHelper::percentToArc(value), true, true);
+    if (group == 0xFFFF || _groups & (1 << group))
+        setDimmState(value, true, true);
 }
 
 void DaliChannel::setMinArc(uint8_t min)
