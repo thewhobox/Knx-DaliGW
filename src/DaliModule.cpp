@@ -926,7 +926,7 @@ void DaliModule::cmdHandleSet(bool hasArg, std::string arg)
     }
 
     uint8_t resultLength = 254;
-    uint8_t *data = new uint8_t[4];
+    uint8_t *data = new uint8_t[5];
     uint8_t *resultData = new uint8_t[4];
     data[1] = std::stoi(arg.substr(6, 2));
     data[2] = std::stoi(arg.substr(0, 2), nullptr, 16);
